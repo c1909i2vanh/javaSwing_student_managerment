@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.util.prefs.Preferences;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,9 +37,12 @@ public class LoginView extends JFrame implements ActionListener {
     private JCheckBox rememberCkBox;
     private JLabel rememberLabel;
     private JButton loginBtn;
+    Preferences preference;
+    boolean rememberPreference;
 
     public LoginView() {
         initComponents();
+        rememberMe();
     }
 
     private void initComponents() {
@@ -97,9 +101,22 @@ public class LoginView extends JFrame implements ActionListener {
         this.pack();
         // cai thuoc tinh cho JFrame
         this.setTitle("Login");
-        this.setSize(400, 300);
+        this.setSize(600, 450);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+    }
+
+    public void rememberMe() {
+        preference = Preferences.userNodeForPackage(this.getClass());
+        // Put the boolean of the rememberMe preference
+        rememberPreference = preference.getBoolean("rememberMe", Boolean.valueOf(""));
+        //Check if the check box was selected
+        if (rememberPreference) {
+            //Replace the textField by the preferemce user and Password who will be stockF
+            userNameField.setText(preference.get("userNameField", ""));
+            passwordField.setText(preference.get("passwordField", ""));
+            rememberCkBox.setSelected(true);
+        }
     }
 
     public void showMessage(String message) {
@@ -138,6 +155,18 @@ public class LoginView extends JFrame implements ActionListener {
     }
 
     public User getUser() {
+        // if the check box is clicked and the boolean rememberPreference is false
+        if (!rememberPreference&&rememberCkBox.isSelected()) {
+            //Insert into the preference the name
+            preference.put("userNameField", userNameField.getText());
+            preference.put("passwordField", String.valueOf(passwordField.getPassword()));
+            preference.putBoolean("rememberMe", true);
+        } else {
+            //Reset the preference
+              preference.put("userNameField", "");
+            preference.put("passwordField", "");
+            preference.putBoolean("rememberMe", false);
+        }
         return new User(userNameField.getText(), String.copyValueOf(passwordField.getPassword()));
     }
 
@@ -157,7 +186,7 @@ public class LoginView extends JFrame implements ActionListener {
         } else {
             if (passwordField.getPassword().length == 0) {
                 passwordField.requestFocus();
-            }else{
+            } else {
                 loginBtn.requestFocus();
             }
         }
