@@ -14,7 +14,7 @@ CREATE TABLE student(
 
 )
 GO
-INSERT INTO student VALUES ('B8861',N'Nguyễn Trường Giang',31,N'Phú vinh An khánh Hoài Đức Hà Nội','0934646892',6.5,1)
+INSERT INTO student VALUES ('B8861',N'Nguyễn Trường Giang',31,1,N'Phú vinh An khánh Hoài Đức Hà Nội','0934646892',6.5,1)
 GO
 -- thủ tục lấy tất cả sinh viên
 CREATE PROC sp_getAll AS

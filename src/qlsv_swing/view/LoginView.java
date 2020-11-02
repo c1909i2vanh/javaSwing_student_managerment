@@ -25,20 +25,20 @@ import qlsv_swing.entity.User;
  * @author GIANG
  */
 public class LoginView extends JFrame implements ActionListener {
-
+    
     private static final long serialVersionUID = 1L;
     private JLabel userNameLabel;
     private JLabel passwordlabel;
     private JPasswordField passwordField;
     private JTextField userNameField;
     private JTextField errorField;
-
+    
     private JButton loginBtn;
-
+    
     public LoginView() {
         initComponents();
     }
-
+    
     private void initComponents() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         userNameLabel = new JLabel("UserName ");
@@ -89,46 +89,55 @@ public class LoginView extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
-
+    
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
     }
-
+    
     public void showError(String message) {
         errorField.setForeground(Color.red);
         errorField.setText(message);
         errorField.setVisible(true);
     }
-
+    
     public void hideError() {
         errorField.setText(null);
         errorField.setVisible(false);
     }
-
+    
+    public void focusUserNameField() {
+        userNameField.requestFocus();
+    }
+    
+    
     public void focusPassField() {
         passwordField.requestFocus();
+    }
+
+    public void clearPasswordField() {
+        passwordField.setText("");
     }
 
     public void focusLoginBtn() {
         loginBtn.requestFocus();
     }
-
+    
     public void loginBtnClick() {
         loginBtn.doClick();
     }
-
+    
     public User getUser() {
         return new User(userNameField.getText(), String.copyValueOf(passwordField.getPassword()));
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        
     }
-
+    
     public void startLogin() {
         this.setVisible(true);
-        if (userNameField.getText().trim().equals( "")) {
+        if (userNameField.getText().trim().equals("")) {
             userNameField.requestFocus();
         } else {
             if (passwordField.getPassword().length == 0) {
@@ -137,7 +146,7 @@ public class LoginView extends JFrame implements ActionListener {
                 loginBtn.requestFocus();
             }
         }
-
+        
     }
 
     public boolean userNameFieldIsEmpty() {
@@ -145,21 +154,23 @@ public class LoginView extends JFrame implements ActionListener {
     }
 
     public boolean passwordFieldIsEmpty() {
+
+    
         return passwordField.getPassword().length == 0;
     }
-
+    
     public void addLoginListener(ActionListener listener) {
         loginBtn.addActionListener(listener);
     }
-
+    
     public void addEnterKeyLoginListener(KeyListener listener) {
         loginBtn.addKeyListener(listener);
     }
-
+    
     public void addUserFieldKeyTypedListener(KeyListener listener) {
         userNameField.addKeyListener(listener);
     }
-
+    
     public void addPasswordFieldKeyTypedListener(KeyListener listener) {
         passwordField.addKeyListener(listener);
     }
