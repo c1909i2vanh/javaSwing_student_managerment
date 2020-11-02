@@ -68,9 +68,9 @@ public class LoginController {
         public void keyPressed(KeyEvent e) {
 
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                if (!loginView.checkUserNameFieldEmpty()) {
+                if (!loginView.userNameFieldIsEmpty()) {
                     loginView.focusPassField();
-                    if (!loginView.checkPasswordFieldEmpty()) {
+                    if (!loginView.passwordFieldIsEmpty()) {
                         loginView.loginBtnClick();
                     } else {
                         loginView.showError("Vui lòng nhập mật khẩu!");

@@ -140,14 +140,11 @@ public class LoginView extends JFrame implements ActionListener {
 
     }
 
-    public boolean checkUserNameFieldEmpty() {
-       if("".equals(userNameField.getText().trim())||userNameField.getText()==null){
-       return true;
-       };
-       return false;
+    public boolean userNameFieldIsEmpty() {
+       return "".equals(userNameField.getText().trim())||userNameField.getText()==null;
     }
 
-    public boolean checkPasswordFieldEmpty() {
+    public boolean passwordFieldIsEmpty() {
         return passwordField.getPassword().length == 0;
     }
 
