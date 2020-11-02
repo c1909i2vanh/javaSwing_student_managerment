@@ -30,6 +30,7 @@ public class LoginController {
         this.userDao = new UserDao();
         view.addLoginListener(new LoginListener());
         view.addEnterKeyLoginListener(new EnterKeyPressedListener());
+        view.addEnterKeyTypedListener(new EnterKeyPressedListener());
         view.addUserFieldKeyTypedListener(new UserTextFieldKeyPressedListener());
         view.addPasswordFieldKeyTypedListener(new PasswordTextFieldKeyPressedListener());
     }
@@ -52,7 +53,12 @@ public class LoginController {
                 studentController.showStudentView();
                 loginView.setVisible(false);
             } else {
-                loginView.showMessage("username hoặc password không đúng!");
+                if (!loginView.passwordFieldIsEmpty()) {
+                    loginView.clearPasswordField();
+                }
+                loginView.focusField();
+                loginView.showError("Username or password is incorrect!");
+              
 
             }
         }
@@ -62,7 +68,7 @@ public class LoginController {
 
         @Override
         public void keyTyped(KeyEvent e) {
-            if(!loginView.passwordFieldIsEmpty()){
+            if (!loginView.passwordFieldIsEmpty()) {
                 loginView.clearPasswordField();
             }
         }
@@ -76,10 +82,10 @@ public class LoginController {
                     if (!loginView.passwordFieldIsEmpty()) {
                         loginView.loginBtnClick();
                     } else {
-                        loginView.showError("Vui lòng nhập mật khẩu!");
+                        loginView.showError("Please enter a password");
                     }
                 } else {
-                    loginView.showError("Vui lòng nhập tài khoản!");
+                    loginView.showError("Please enter a username!");
                 }
             }
         }
@@ -101,20 +107,18 @@ public class LoginController {
         public void keyPressed(KeyEvent e) {
 
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-               
+
                 if (!loginView.userNameFieldIsEmpty()) {
-                    if(!loginView.passwordFieldIsEmpty()){
-                      
-                      loginView.loginBtnClick();
-                      loginView.hideError();
-                    }else{
+                    if (!loginView.passwordFieldIsEmpty()) {
+                        loginView.loginBtnClick();
+
+                    } else {
                         loginView.focusPassField();
-                        loginView.showError("Vui lòng nhập mật khẩu!");
+                        loginView.showError("Please enter a password");
                     }
-                  
                 } else {
                     loginView.focusUserNameField();
-                    loginView.showError("Vui lòng nhập tài khoản!");
+                    loginView.showError("Please enter a username!");
                 }
 
             }
@@ -146,18 +150,19 @@ public class LoginController {
                     studentController.showStudentView();
                     loginView.setVisible(false);
                 } else {
-                    
-                    loginView.showMessage("username hoặc password không đúng!");
-                    loginView.focusUserNameField();
-                    loginView.showError("Tài khoản hoặc mật khảu không đúng!");
-
+                    if (!loginView.passwordFieldIsEmpty()) {
+                        loginView.clearPasswordField();
+                    }
+                    loginView.showError("Username or password is incorrect!");
+                  
+                    loginView.focusField();
                 }
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-          
+
         }
 
     }

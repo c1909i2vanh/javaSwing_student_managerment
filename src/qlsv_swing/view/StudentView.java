@@ -10,8 +10,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.ButtonGroup;
@@ -299,7 +297,7 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
 
     public String getStudentDelete() {
         String id = "";
-        if (idField.getText() != null && idField.getText() != "") {
+        if (idField.getText() != null && !"".equals(idField.getText())) {
             id = idField.getText();
             return id;
         }
@@ -311,7 +309,7 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
         int size = studentList.size();
         Object[][] data = new Object[size][10];
         int i = 0;
-        if (studentList.size() != 0) {
+        if (!studentList.isEmpty()) {
             for (Student st : studentList) {
                 data[i][0] = startingNumber;
                 data[i][1] = st.getId();
@@ -509,11 +507,7 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
         return Id;
     }
 
-    public void refreshStudentTable() {
-        DefaultTableModel dm = (DefaultTableModel) studentTable.getModel();
-        dm.fireTableDataChanged();
-    }
-
+  
     
    
 }
