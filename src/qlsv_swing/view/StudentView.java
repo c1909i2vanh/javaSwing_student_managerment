@@ -9,6 +9,7 @@ import java.awt.Dimension;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -363,8 +364,9 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
 
     public void addDeleteStudentListener(ActionListener listener) {
         deleteStudentBtn.addActionListener(listener);
-
     }
+    
+   
 
     public void addSortStudentByNameListener(ActionListener listener) {
         sortStudentByNameBtn.addActionListener(listener);
@@ -378,6 +380,16 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
         studentTable.addMouseListener(listener);
 
     }
+     public void addPhoneFieldKeyTypedListener(KeyListener listener){
+       phoneField.addKeyListener(listener);
+    }
+     public void addAgeFieldClickedTable(KeyListener listener){
+       ageField.addKeyListener(listener);
+    }
+     public void addGpaFieldClickedTable(KeyListener listener){
+       gpaField.addKeyListener(listener);
+    }
+    
 
     public void clearStudentInfo() {
         idField.setText("");
@@ -502,4 +514,6 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
         dm.fireTableDataChanged();
     }
 
+    
+   
 }

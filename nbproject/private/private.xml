@@ -5,12 +5,8 @@
         <group>
             <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/controller/StudentController.java</file>
             <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/App.java</file>
-            <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/utils/FileUtils.java</file>
-            <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/view/StudentView.java</file>
+            <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/controller/LoginController.java</file>
             <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/view/LoginView.java</file>
-            <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/dao/ConnectStudent.java</file>
-            <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/dao/StudentDaoImpl.java</file>
-            <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/entity/Student.java</file>
         </group>
     </open-files>
 </project-private>

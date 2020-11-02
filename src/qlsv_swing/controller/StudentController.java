@@ -7,6 +7,8 @@ package qlsv_swing.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -39,6 +41,9 @@ public class StudentController {
         view.addDeleteStudentListener(new DeleteStudentListener());
         view.addSortStudentByGpaListener(new SortStudentByGpaListener());
         view.addSortStudentByNameListener(new SortStudentByNameListener());
+        view.addPhoneFieldKeyTypedListener(new PhoneFieldKeyTypedListener());
+        view.addAgeFieldClickedTable(new AgeFieldKeyTypedListener());
+        view.addGpaFieldClickedTable(new GpaFieldKeyTypedListener());
 
     }
 
@@ -101,7 +106,7 @@ public class StudentController {
             if (student != null) {
                 studentDao.delete(student);
                 showStudentView();
-                
+
                 studentView.clearStudentInfo();
                 studentView.showMessage(" Xóa thành công sinh viên!");
 
@@ -115,9 +120,9 @@ public class StudentController {
         @Override
         public void actionPerformed(ActionEvent e) {
             List<Student> studentList = studentDao.sortStudentByGPA();
-            studentView.setVisible(true); 
+            studentView.setVisible(true);
             studentView.clearStudentInfo();
-            studentView.showListStudents(studentList);          
+            studentView.showListStudents(studentList);
             studentView.showMessage(" Sắp xếp sinh viên theo Gpa thành công!");
 
         }
@@ -138,6 +143,7 @@ public class StudentController {
     }
 
     private static class AddMouseClickToTableListener implements MouseListener {
+
         @Override
         public void mouseClicked(MouseEvent e) {
             String id = studentView.getEditStudent();
@@ -145,7 +151,7 @@ public class StudentController {
             if (student != null) {
                 studentView.setEditStudent(student);
             }
-            
+
         }
 
         @Override
@@ -164,5 +170,54 @@ public class StudentController {
         public void mouseExited(MouseEvent e) {
         }
 
+    }
+
+    private static class PhoneFieldKeyTypedListener implements KeyListener {
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            if (!Character.isDigit(e.getKeyChar())) {
+                e.consume();
+            } }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            }
+    }
+    private static class AgeFieldKeyTypedListener implements KeyListener {
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            if (!Character.isDigit(e.getKeyChar())) {
+                e.consume();
+            } }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            }
+    }
+ private static class GpaFieldKeyTypedListener implements KeyListener {
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            if (!Character.isDigit(e.getKeyChar())) {
+                e.consume();
+            } }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            }
     }
 }

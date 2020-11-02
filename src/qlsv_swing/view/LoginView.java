@@ -73,6 +73,7 @@ public class LoginView extends JFrame implements ActionListener {
         // cai thuoc tinh cho JFrame
         this.setTitle("Login");
         this.setSize(400, 300);
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
 
