@@ -383,10 +383,10 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
      public void addPhoneFieldKeyTypedListener(KeyListener listener){
        phoneField.addKeyListener(listener);
     }
-     public void addAgeFieldClickedTable(KeyListener listener){
+     public void addAgeFieldKeyTypedTable(KeyListener listener){
        ageField.addKeyListener(listener);
     }
-     public void addGpaFieldClickedTable(KeyListener listener){
+     public void addGpaFieldKeyTypedTable(KeyListener listener){
        gpaField.addKeyListener(listener);
     }
     

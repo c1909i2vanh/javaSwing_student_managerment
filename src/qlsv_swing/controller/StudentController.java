@@ -42,8 +42,8 @@ public class StudentController {
         view.addSortStudentByGpaListener(new SortStudentByGpaListener());
         view.addSortStudentByNameListener(new SortStudentByNameListener());
         view.addPhoneFieldKeyTypedListener(new PhoneFieldKeyTypedListener());
-        view.addAgeFieldClickedTable(new AgeFieldKeyTypedListener());
-        view.addGpaFieldClickedTable(new GpaFieldKeyTypedListener());
+        view.addAgeFieldKeyTypedTable(new AgeFieldKeyTypedListener());
+        view.addGpaFieldKeyTypedTable(new GpaFieldKeyTypedListener());
 
     }
 
@@ -220,4 +220,5 @@ public class StudentController {
         public void keyReleased(KeyEvent e) {
             }
     }
+
 }

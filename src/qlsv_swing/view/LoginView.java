@@ -5,8 +5,11 @@
  */
 package qlsv_swing.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,6 +31,8 @@ public class LoginView extends JFrame implements ActionListener {
     private JLabel passwordlabel;
     private JPasswordField passwordField;
     private JTextField userNameField;
+    private JTextField errorField;
+
     private JButton loginBtn;
 
     public LoginView() {
@@ -40,6 +45,7 @@ public class LoginView extends JFrame implements ActionListener {
         passwordlabel = new JLabel("Password ");
         userNameField = new JTextField(15);
         passwordField = new JPasswordField(15);
+        errorField = new JTextField(15);
         loginBtn = new JButton("Login");
         loginBtn.addActionListener(this);
 
@@ -52,7 +58,12 @@ public class LoginView extends JFrame implements ActionListener {
         panel.add(userNameLabel);
         panel.add(passwordlabel);
         panel.add(userNameField);
+        errorField.setEditable(false);
+        userNameField.setBorder(BorderFactory.createEmptyBorder());
+        passwordField.setBorder(BorderFactory.createEmptyBorder());
+        errorField.setBorder(BorderFactory.createEmptyBorder());
         panel.add(passwordField);
+        panel.add(errorField);
         panel.add(loginBtn);
 
         // cai dat vi tri cac thanh phan tren man hinh login
@@ -64,8 +75,10 @@ public class LoginView extends JFrame implements ActionListener {
         layout.putConstraint(SpringLayout.NORTH, userNameField, 80, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.WEST, passwordField, 80, SpringLayout.WEST, passwordlabel);
         layout.putConstraint(SpringLayout.NORTH, passwordField, 105, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.WEST, errorField, 80, SpringLayout.WEST, passwordlabel);
+        layout.putConstraint(SpringLayout.NORTH, errorField, 140, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.WEST, loginBtn, 80, SpringLayout.WEST, passwordlabel);
-        layout.putConstraint(SpringLayout.NORTH, loginBtn, 130, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.NORTH, loginBtn, 180, SpringLayout.NORTH, panel);
 
         // add panel toi JFrame
         this.add(panel);
@@ -81,6 +94,29 @@ public class LoginView extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(this, message);
     }
 
+    public void showError(String message) {
+        errorField.setForeground(Color.red);
+        errorField.setText(message);
+        errorField.setVisible(true);
+    }
+
+    public void hideError() {
+        errorField.setText(null);
+        errorField.setVisible(false);
+    }
+
+    public void focusPassField() {
+        passwordField.requestFocus();
+    }
+
+    public void focusLoginBtn() {
+        loginBtn.requestFocus();
+    }
+
+    public void loginBtnClick() {
+        loginBtn.doClick();
+    }
+
     public User getUser() {
         return new User(userNameField.getText(), String.copyValueOf(passwordField.getPassword()));
     }
@@ -90,7 +126,44 @@ public class LoginView extends JFrame implements ActionListener {
 
     }
 
+    public void startLogin() {
+        this.setVisible(true);
+        if (userNameField.getText().trim().equals( "")) {
+            userNameField.requestFocus();
+        } else {
+            if (passwordField.getPassword().length == 0) {
+                passwordField.requestFocus();
+            } else {
+                loginBtn.requestFocus();
+            }
+        }
+
+    }
+
+    public boolean checkUserNameFieldEmpty() {
+       if("".equals(userNameField.getText().trim())||userNameField.getText()==null){
+       return true;
+       };
+       return false;
+    }
+
+    public boolean checkPasswordFieldEmpty() {
+        return passwordField.getPassword().length == 0;
+    }
+
     public void addLoginListener(ActionListener listener) {
         loginBtn.addActionListener(listener);
+    }
+
+    public void addEnterKeyLoginListener(KeyListener listener) {
+        loginBtn.addKeyListener(listener);
+    }
+
+    public void addUserFieldKeyTypedListener(KeyListener listener) {
+        userNameField.addKeyListener(listener);
+    }
+
+    public void addPasswordFieldKeyTypedListener(KeyListener listener) {
+        passwordField.addKeyListener(listener);
     }
 }
