@@ -31,7 +31,7 @@ public class LoginController {
         view.addLoginListener(new LoginListener());
         view.addEnterKeyLoginListener(new EnterKeyPressedListener());
         view.addUserFieldKeyTypedListener(new UserTextFieldKeyPressedListener());
-        view.addPasswordFieldKeyTypedListener(null);
+        view.addPasswordFieldKeyTypedListener(new PasswordTextFieldKeyPressedListener());
     }
 
     public void showLoginView() {
@@ -62,6 +62,9 @@ public class LoginController {
 
         @Override
         public void keyTyped(KeyEvent e) {
+            if(!loginView.checkPasswordFieldEmpty()){
+                loginView.clearPasswordField();
+            }
         }
 
         @Override
@@ -76,7 +79,6 @@ public class LoginController {
                         loginView.showError("Vui lòng nhập mật khẩu!");
                     }
                 } else {
-                   
                     loginView.showError("Vui lòng nhập tài khoản!");
                 }
             }
@@ -99,24 +101,28 @@ public class LoginController {
         public void keyPressed(KeyEvent e) {
 
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                System.out.println("aaaa");
-//                User user = loginView.getUser();
-//                if (userDao.checkUser(user)) {
-//                    //neu dang nhap thanh cong mo man hinh quan ly sinh vien
-//                    studentView = new StudentView();
-//                    StudentController studentController = new StudentController(studentView);
-//                    studentController.showStudentView();
-//                    loginView.setVisible(false);
-//                } else {
-//                    loginView.showMessage("username hoặc password không đúng!");
-//
-//                }
+               
+                if (!loginView.checkUserNameFieldEmpty()) {
+                    if(!loginView.checkPasswordFieldEmpty()){
+                      
+                      loginView.loginBtnClick();
+                      loginView.hideError();
+                    }else{
+                        loginView.focusPassField();
+                        loginView.showError("Vui lòng nhập mật khẩu!");
+                    }
+                  
+                } else {
+                    loginView.focusUserNameField();
+                    loginView.showError("Vui lòng nhập tài khoản!");
+                }
+
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            System.out.println("bbbbbbb");
+
         }
 
     }
@@ -131,24 +137,27 @@ public class LoginController {
         public void keyPressed(KeyEvent e) {
 
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                System.out.println("aaaa");
-//                User user = loginView.getUser();
-//                if (userDao.checkUser(user)) {
-//                    //neu dang nhap thanh cong mo man hinh quan ly sinh vien
-//                    studentView = new StudentView();
-//                    StudentController studentController = new StudentController(studentView);
-//                    studentController.showStudentView();
-//                    loginView.setVisible(false);
-//                } else {
-//                    loginView.showMessage("username hoặc password không đúng!");
-//
-//                }
+
+                User user = loginView.getUser();
+                if (userDao.checkUser(user)) {
+                    //neu dang nhap thanh cong mo man hinh quan ly sinh vien
+                    studentView = new StudentView();
+                    StudentController studentController = new StudentController(studentView);
+                    studentController.showStudentView();
+                    loginView.setVisible(false);
+                } else {
+                    
+                    loginView.showMessage("username hoặc password không đúng!");
+                    loginView.focusUserNameField();
+                    loginView.showError("Tài khoản hoặc mật khảu không đúng!");
+
+                }
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            System.out.println("bbbbbbb");
+          
         }
 
     }
