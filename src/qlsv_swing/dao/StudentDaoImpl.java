@@ -45,7 +45,7 @@ public class StudentDaoImpl implements IStudent {
         try {
             if (connectStudent == null) {
                 setConnectionStudent();
-                System.out.println("ket noi lai");
+               
             }
             cst = connectStudent.prepareCall("{call sp_getAll}");
             rs = cst.executeQuery();
@@ -212,7 +212,7 @@ public class StudentDaoImpl implements IStudent {
         try {
             if (connectStudent != null) {
                 connectStudent.close();
-                System.out.println("Ngat student");
+             
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -224,7 +224,7 @@ public class StudentDaoImpl implements IStudent {
         if (cst != null) {
             try {
                 cst.close();
-                System.out.println("ngat callable");
+               
             } catch (SQLException ex) {
                 Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -236,7 +236,7 @@ public class StudentDaoImpl implements IStudent {
         if (rs != null) {
             try {
                 rs.close();
-                System.out.println("ngat result");
+                
             } catch (SQLException ex) {
                 Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -5,6 +5,8 @@
  */
 package qlsv_swing;
 
+import com.sun.javafx.css.Stylesheet;
+import com.sun.javafx.css.parser.CSSParser;
 import java.awt.EventQueue;
 import qlsv_swing.controller.LoginController;
 import qlsv_swing.view.LoginView;
@@ -19,16 +21,20 @@ public class App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       EventQueue.invokeLater(new Runnable(){
+        EventQueue.invokeLater(new Runnable() {
 
-           @Override
-           public void run() {
-               LoginView view = new LoginView();
-               LoginController controller = new LoginController(view);
-               controller.showLoginView();
-               }
-       
-       });
+            @Override
+            public void run() {
+               
+                
+              
+                LoginView view = new LoginView();
+               
+                LoginController controller = new LoginController(view);
+                controller.showLoginView();
+            }
+
+        });
     }
-    
+
 }
