@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.border.Border;
 import qlsv_swing.entity.User;
 
 /**
@@ -46,6 +47,7 @@ public class LoginView extends JFrame implements ActionListener {
     }
 
     private void initComponents() {
+        
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         userNameLabel = new JLabel("UserName ");
         passwordlabel = new JLabel("Password ");
@@ -59,6 +61,7 @@ public class LoginView extends JFrame implements ActionListener {
 
         //tao Spring layout
         SpringLayout layout = new SpringLayout();
+        JPanel panelParent = new JPanel();
         JPanel panel = new JPanel();
         // tạo đối tượng panel để chứa các thành phần của màn hình login
         panel.setSize(400, 300);
@@ -97,17 +100,27 @@ public class LoginView extends JFrame implements ActionListener {
         layout.putConstraint(SpringLayout.NORTH, loginBtn, 220, SpringLayout.NORTH, panel);
 
         // add panel toi JFrame
-        this.add(panel);
+        panelParent.setBackground(Color.red);
+        panel.setBackground(Color.BLUE);
+        panelParent.add(panel);
+        this.add(panelParent);
         this.pack();
+        //Tạo border cho Frame
+        
+        Border panel_title_border = BorderFactory.createMatteBorder(0, 1, 1, 1, Color.yellow);
         // cai thuoc tinh cho JFrame
+        
         this.setTitle("Login");
-        this.setSize(600, 450);
+        this.setSize(900, 450);
+        this.setBackground(Color.yellow);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        
     }
 
-    public void rememberMe() {
+    private void rememberMe() {
         preference = Preferences.userNodeForPackage(this.getClass());
+
         // Put the boolean of the rememberMe preference
         rememberPreference = preference.getBoolean("rememberMe", Boolean.valueOf(""));
         //Check if the check box was selected
@@ -156,16 +169,17 @@ public class LoginView extends JFrame implements ActionListener {
 
     public User getUser() {
         // if the check box is clicked and the boolean rememberPreference is false
-        if (!rememberPreference&&rememberCkBox.isSelected()) {
+        if (!rememberPreference && rememberCkBox.isSelected()) {
             //Insert into the preference the name
             preference.put("userNameField", userNameField.getText());
             preference.put("passwordField", String.valueOf(passwordField.getPassword()));
             preference.putBoolean("rememberMe", true);
         } else {
             //Reset the preference
-              preference.put("userNameField", "");
+            preference.put("userNameField", "");
             preference.put("passwordField", "");
             preference.putBoolean("rememberMe", false);
+
         }
         return new User(userNameField.getText(), String.copyValueOf(passwordField.getPassword()));
     }

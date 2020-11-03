@@ -28,7 +28,7 @@ public class ConnectStudent {
             try {
                 Class.forName(DRIVER);
                 conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("ket noi thanh cong");
+              
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(ConnectStudent.class.getName()).log(Level.SEVERE, null, ex);
             }
