@@ -62,12 +62,11 @@ public class LoginController {
                 studentController.showStudentView();
                 loginView.closeLogin();
             } else {
-                if (!loginView.passwordFieldIsEmpty()) {
-                    loginView.clearPasswordField();
-                }
-                loginView.focusField();
+               
+                
                 loginView.showError("Username or password is incorrect!");
-
+                loginView.focusUserNameField();
+                loginView.clearPasswordField();
             }
         }
     }
@@ -109,6 +108,9 @@ public class LoginController {
 
         @Override
         public void keyTyped(KeyEvent e) {
+           if(e.getKeyCode()==KeyEvent.VK_TAB){
+               loginView.focusLoginBtn();
+           }
         }
 
         @Override
@@ -119,6 +121,7 @@ public class LoginController {
                 if (!loginView.userNameFieldIsEmpty()) {
                     if (!loginView.passwordFieldIsEmpty()) {
                         loginView.loginBtnClick();
+                        
 
                     } else {
                         loginView.focusPassField();
@@ -156,11 +159,10 @@ public class LoginController {
                     studentController.showStudentView();
                     loginView.closeLogin();
                 } else {
-                    if (!loginView.passwordFieldIsEmpty()) {
-                        loginView.clearPasswordField();
-                    }
+                    
                     loginView.showError("Username or password is incorrect!");
-                    loginView.focusField();
+                    loginView.clearPasswordField();
+                    loginView.focusUserNameField();
                 }
             }
         }

@@ -217,6 +217,9 @@ public class LoginView extends javax.swing.JFrame {
 
         infoIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/info x20.png"))); // NOI18N
         infoIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                infoIconMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 infoIconMouseEntered(evt);
             }
@@ -226,9 +229,17 @@ public class LoginView extends javax.swing.JFrame {
         loginBtn.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         loginBtn.setForeground(new java.awt.Color(255, 255, 255));
         loginBtn.setText("Login");
-        loginBtn.setBorder(null);
+        loginBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         loginBtn.setBorderPainted(false);
         loginBtn.setFocusPainted(false);
+        loginBtn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                loginBtnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                loginBtnFocusLost(evt);
+            }
+        });
 
         rememberMeLabel.setText("Remember Me");
         rememberMeLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -458,6 +469,19 @@ public class LoginView extends javax.swing.JFrame {
     private void passwordSeparatorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordSeparatorMouseExited
           passwordSeparator.setForeground(new Color(240,240,240));
     }//GEN-LAST:event_passwordSeparatorMouseExited
+
+    private void loginBtnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_loginBtnFocusGained
+   
+    }//GEN-LAST:event_loginBtnFocusGained
+
+    private void loginBtnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_loginBtnFocusLost
+            
+
+    }//GEN-LAST:event_loginBtnFocusLost
+
+    private void infoIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_infoIconMouseClicked
+           
+    }//GEN-LAST:event_infoIconMouseClicked
 
     /**
      * @param args the command line arguments
