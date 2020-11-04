@@ -10,6 +10,7 @@ import com.sun.javafx.css.parser.CSSParser;
 import java.awt.EventQueue;
 import qlsv_swing.controller.LoginController;
 import qlsv_swing.view.LoginView;
+import qlsv_swing.view.LoginView2;
 
 /**
  *
@@ -24,12 +25,8 @@ public class App {
         EventQueue.invokeLater(new Runnable() {
 
             @Override
-            public void run() {
-               
-                
-              
-                LoginView view = new LoginView();
-               
+            public void run() {                         
+                LoginView view = new LoginView();             
                 LoginController controller = new LoginController(view);
                 controller.showLoginView();
             }
