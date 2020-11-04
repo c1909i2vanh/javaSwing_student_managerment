@@ -3,9 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/loginformcreate/TestLoginForm.java</file>
+=======
+<<<<<<< HEAD
+            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/javaSwing_student_managerment/src/qlsv_swing/App.java</file>
+            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/javaSwing_student_managerment/src/qlsv_swing/controller/LoginController.java</file>
+            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/javaSwing_student_managerment/src/qlsv_swing/view/LoginView.java</file>
+            <file>file:/C:/Users/Admin/Documents/NetBeansProjects/javaSwing_student_managerment/src/qlsv_swing/dao/UserDao.java</file>
+=======
+>>>>>>> a41128877bdc8ae25e3bc0c86367ffd59e4bdaad
             <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/controller/LoginController.java</file>
             <file>file:/C:/Users/GIANG/Documents/NetBeansProjects/JavaSwing/Qlsv_swing/src/qlsv_swing/view/LoginView.java</file>
+>>>>>>> 00e6952ad15ba2247b87a5b3dbf8af447706e03b
         </group>
     </open-files>
 </project-private>
