@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 import qlsv_swing.dao.UserDao;
 import qlsv_swing.entity.User;
 import qlsv_swing.view.LoginView;
+import qlsv_swing.view.LoginView2;
 import qlsv_swing.view.StudentView;
 
 /**
@@ -24,21 +25,29 @@ public class LoginController {
     private static UserDao userDao;
     private static LoginView loginView;
     private static StudentView studentView;
+    private static Boolean status;
 
     public LoginController(LoginView view) {
         this.loginView = view;
         this.userDao = new UserDao();
         view.addLoginListener(new LoginListener());
-        view.addEnterKeyLoginListener(new EnterKeyPressedListener());
-        view.addEnterKeyTypedListener(new EnterKeyPressedListener());
-        view.addUserFieldKeyTypedListener(new UserTextFieldKeyPressedListener());
-        view.addPasswordFieldKeyTypedListener(new PasswordTextFieldKeyPressedListener());
+         view.addEnterKeyLoginListener(new EnterKeyPressedListener());
+          view.addEnterKeyTypedListener(new EnterKeyPressedListener());
+          view.addUserFieldKeyTypedListener(new UserTextFieldKeyPressedListener());
+         view.addPasswordFieldKeyTypedListener(new PasswordTextFieldKeyPressedListener());
     }
 
     public void showLoginView() {
-
         loginView.startLogin();
 
+    }
+
+    public static Boolean getStatus() {
+        return status;
+    }
+
+    public static void setStatus(Boolean status) {
+        LoginController.status = status;
     }
 
     private static class LoginListener implements ActionListener {
@@ -51,14 +60,13 @@ public class LoginController {
                 studentView = new StudentView();
                 StudentController studentController = new StudentController(studentView);
                 studentController.showStudentView();
-                loginView.setVisible(false);
+                loginView.closeLogin();
             } else {
                 if (!loginView.passwordFieldIsEmpty()) {
                     loginView.clearPasswordField();
                 }
                 loginView.focusField();
                 loginView.showError("Username or password is incorrect!");
-              
 
             }
         }
@@ -139,22 +147,19 @@ public class LoginController {
 
         @Override
         public void keyPressed(KeyEvent e) {
-
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
                 User user = loginView.getUser();
                 if (userDao.checkUser(user)) {
                     //neu dang nhap thanh cong mo man hinh quan ly sinh vien
                     studentView = new StudentView();
                     StudentController studentController = new StudentController(studentView);
                     studentController.showStudentView();
-                    loginView.setVisible(false);
+                    loginView.closeLogin();
                 } else {
                     if (!loginView.passwordFieldIsEmpty()) {
                         loginView.clearPasswordField();
                     }
                     loginView.showError("Username or password is incorrect!");
-                  
                     loginView.focusField();
                 }
             }
