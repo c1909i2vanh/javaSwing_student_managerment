@@ -7,8 +7,10 @@ package qlsv_swing.view;
 
 import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.util.prefs.Preferences;
@@ -34,11 +36,13 @@ public class LoginView extends javax.swing.JFrame {
     public LoginView() {
         this.setUndecorated(true);
         initComponents();
+
         this.setLocationRelativeTo(null);
         rememberMe();
         ImageIcon img = new ImageIcon(getClass().getResource("/images/blue_school_24.png"));
-      this.setIconImage(img.getImage());
-
+        this.setIconImage(img.getImage());
+        this.focusUserNameField();
+        this.setEnabled(true);
     }
 
     /**
@@ -64,9 +68,12 @@ public class LoginView extends javax.swing.JFrame {
         passwordSeparator = new javax.swing.JSeparator();
         infoIcon = new javax.swing.JLabel();
         loginBtn = new javax.swing.JButton();
-        rememberMeLabel = new javax.swing.JLabel();
         rememberMeCBox = new javax.swing.JCheckBox();
         errorField = new javax.swing.JTextField();
+        RememberMeField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        registerBtn = new javax.swing.JButton();
+        forgotPassBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -76,8 +83,14 @@ public class LoginView extends javax.swing.JFrame {
 
         mainPanel.setBackground(new java.awt.Color(255, 255, 255));
         mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 204)));
+        mainPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mainPanelMouseClicked(evt);
+            }
+        });
 
         header.setBackground(new java.awt.Color(135, 240, 251));
+        header.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         header.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 headerMouseDragged(evt);
@@ -241,19 +254,6 @@ public class LoginView extends javax.swing.JFrame {
             }
         });
 
-        rememberMeLabel.setText("Remember Me");
-        rememberMeLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rememberMeLabelMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                rememberMeLabelMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                rememberMeLabelMouseExited(evt);
-            }
-        });
-
         rememberMeCBox.setBackground(new java.awt.Color(255, 255, 255));
         rememberMeCBox.setForeground(new java.awt.Color(0, 204, 204));
         rememberMeCBox.setBorder(null);
@@ -274,8 +274,64 @@ public class LoginView extends javax.swing.JFrame {
             }
         });
 
+        errorField.setEditable(false);
+        errorField.setBackground(new java.awt.Color(255, 255, 255));
         errorField.setForeground(new java.awt.Color(255, 51, 51));
         errorField.setBorder(null);
+
+        RememberMeField.setEditable(false);
+        RememberMeField.setBackground(new java.awt.Color(255, 255, 255));
+        RememberMeField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        RememberMeField.setText("Remember Me");
+        RememberMeField.setBorder(null);
+        RememberMeField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        RememberMeField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RememberMeFieldMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                RememberMeFieldMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                RememberMeFieldMouseExited(evt);
+            }
+        });
+        RememberMeField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RememberMeFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Not a member?");
+
+        registerBtn.setBackground(new java.awt.Color(255, 255, 255));
+        registerBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        registerBtn.setForeground(new java.awt.Color(102, 255, 255));
+        registerBtn.setText("Signup now");
+        registerBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        registerBtn.setContentAreaFilled(false);
+        registerBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        forgotPassBtn.setBackground(new java.awt.Color(255, 255, 255));
+        forgotPassBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        forgotPassBtn.setForeground(new java.awt.Color(153, 255, 255));
+        forgotPassBtn.setText("Forgot Password ?");
+        forgotPassBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        forgotPassBtn.setBorderPainted(false);
+        forgotPassBtn.setContentAreaFilled(false);
+        forgotPassBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        forgotPassBtn.setFocusPainted(false);
+        forgotPassBtn.setOpaque(false);
+        forgotPassBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                forgotPassBtnMouseClicked(evt);
+            }
+        });
+        forgotPassBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forgotPassBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -283,63 +339,82 @@ public class LoginView extends javax.swing.JFrame {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap(58, Short.MAX_VALUE)
+                .addGap(64, 64, 64)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(userLabelIcon)
-                    .addComponent(passwordLabelIcon))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                    .addComponent(passwordLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(userSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(passwordSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(errorField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                                    .addComponent(rememberMeCBox)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(rememberMeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(32, 32, 32))))
-                        .addGap(50, 50, 50)
-                        .addComponent(infoIcon)
-                        .addGap(32, 32, 32))
+                        .addComponent(errorField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(200, 200, 200))))
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                                .addComponent(rememberMeCBox)
+                                .addGap(18, 18, 18)
+                                .addComponent(RememberMeField, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(forgotPassBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(userSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                                    .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                                    .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                                    .addComponent(passwordSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE))))
+                        .addGap(50, 50, 50)))
+                .addComponent(infoIcon)
+                .addGap(32, 32, 32))
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGap(202, 202, 202)
+                        .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGap(167, 167, 167)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(registerBtn)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(userLabelIcon)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                                 .addGap(15, 15, 15)
                                 .addComponent(infoIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(userSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(passwordLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(passwordSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(rememberMeCBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rememberMeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(errorField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addGap(7, 7, 7)
+                        .addComponent(userSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)
+                        .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(passwordSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(userLabelIcon)
+                        .addGap(18, 18, 18)
+                        .addComponent(passwordLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(17, 17, 17)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rememberMeCBox)
+                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(RememberMeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(forgotPassBtn)))
+                .addGap(24, 24, 24)
+                .addComponent(errorField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
                 .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
+                .addGap(18, 18, 18)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(registerBtn))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -350,7 +425,7 @@ public class LoginView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -392,6 +467,7 @@ public class LoginView extends javax.swing.JFrame {
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
         this.setLocation(x - xx, y - xy);
+        header.setCursor(new Cursor(13));
     }//GEN-LAST:event_headerMouseDragged
 
     private void headerMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerMousePressed
@@ -416,7 +492,7 @@ public class LoginView extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordFieldKeyTyped
 
     private void rememberMeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rememberMeCBoxActionPerformed
-        // TODO add your handling code here:
+        this.setRememberCBoxIcon();
     }//GEN-LAST:event_rememberMeCBoxActionPerformed
 
     private void rememberMeCBoxMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rememberMeCBoxMouseEntered
@@ -424,29 +500,15 @@ public class LoginView extends javax.swing.JFrame {
     }//GEN-LAST:event_rememberMeCBoxMouseEntered
 
     private void rememberMeCBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rememberMeCBoxMouseClicked
-        this.setRememberCBoxIcon();
+
     }//GEN-LAST:event_rememberMeCBoxMouseClicked
 
     private void rememberMeCBoxMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rememberMeCBoxMouseExited
         rememberMeCBox.setBackground(new Color(255, 255, 255));
     }//GEN-LAST:event_rememberMeCBoxMouseExited
 
-    private void rememberMeLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rememberMeLabelMouseEntered
-        rememberMeCBox.setBackground(new Color(232, 232, 232));
-
-    }//GEN-LAST:event_rememberMeLabelMouseEntered
-
-    private void rememberMeLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rememberMeLabelMouseExited
-        rememberMeCBox.setBackground(new Color(255, 255, 255));
-
-    }//GEN-LAST:event_rememberMeLabelMouseExited
-
-    private void rememberMeLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rememberMeLabelMouseClicked
-       
-    }//GEN-LAST:event_rememberMeLabelMouseClicked
-
     private void userLabelIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userLabelIconMouseClicked
-      nameField.requestFocus();
+        nameField.requestFocus();
     }//GEN-LAST:event_userLabelIconMouseClicked
 
     private void passwordLabelIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordLabelIconMouseClicked
@@ -454,41 +516,73 @@ public class LoginView extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordLabelIconMouseClicked
 
     private void nameFieldMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nameFieldMouseEntered
-    
-          userSeparator.setForeground(new Color(160,160,160));
+
+        userSeparator.setForeground(new Color(160, 160, 160));
     }//GEN-LAST:event_nameFieldMouseEntered
 
     private void nameFieldMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nameFieldMouseExited
-        userSeparator.setForeground(new Color(240,240,240));
+        userSeparator.setForeground(new Color(240, 240, 240));
     }//GEN-LAST:event_nameFieldMouseExited
 
     private void passwordSeparatorMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordSeparatorMouseEntered
-        passwordSeparator.setForeground(new Color(160,160,160));
+        passwordSeparator.setForeground(new Color(160, 160, 160));
     }//GEN-LAST:event_passwordSeparatorMouseEntered
 
     private void passwordSeparatorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordSeparatorMouseExited
-          passwordSeparator.setForeground(new Color(240,240,240));
+        passwordSeparator.setForeground(new Color(240, 240, 240));
     }//GEN-LAST:event_passwordSeparatorMouseExited
 
     private void loginBtnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_loginBtnFocusGained
-   
+
     }//GEN-LAST:event_loginBtnFocusGained
 
     private void loginBtnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_loginBtnFocusLost
-            
+
 
     }//GEN-LAST:event_loginBtnFocusLost
 
     private void infoIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_infoIconMouseClicked
-           
+
     }//GEN-LAST:event_infoIconMouseClicked
+
+    private void RememberMeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RememberMeFieldActionPerformed
+
+    }//GEN-LAST:event_RememberMeFieldActionPerformed
+
+    private void RememberMeFieldMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RememberMeFieldMouseEntered
+        rememberMeCBox.setBackground(new Color(232, 232, 232));
+    }//GEN-LAST:event_RememberMeFieldMouseEntered
+
+    private void RememberMeFieldMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RememberMeFieldMouseExited
+        rememberMeCBox.setBackground(new Color(255, 255, 255));
+    }//GEN-LAST:event_RememberMeFieldMouseExited
+
+    private void RememberMeFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RememberMeFieldMouseClicked
+        rememberMeCBox.setSelected(!getStatusRememberMeCBox());
+        this.setRememberCBoxIcon();
+
+    }//GEN-LAST:event_RememberMeFieldMouseClicked
+
+    private void mainPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainPanelMouseClicked
+        System.out.println("a");
+    }//GEN-LAST:event_mainPanelMouseClicked
+
+    private void forgotPassBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forgotPassBtnActionPerformed
+      forgotPassBtn.setBackground(Color.WHITE);
+        System.out.println("a");
+    }//GEN-LAST:event_forgotPassBtnActionPerformed
+
+    private void forgotPassBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forgotPassBtnMouseClicked
+        forgotPassBtn.setBackground(Color.WHITE);
+      
+    }//GEN-LAST:event_forgotPassBtnMouseClicked
 
     /**
      * @param args the command line arguments
      */
     public void startLogin() {
         this.setVisible(true);
-        this.focusField();
+        this.focusUserNameField();
         this.viewCustomStyle();
         this.setRememberCBoxIcon();
     }
@@ -497,7 +591,7 @@ public class LoginView extends javax.swing.JFrame {
         this.setVisible(false);
     }
 
-    public void focusField() {
+    public  void focusField() {
         if (nameField.getText().trim().equals("")) {
             nameField.requestFocus();
         } else {
@@ -506,6 +600,20 @@ public class LoginView extends javax.swing.JFrame {
             } else {
                 loginBtn.requestFocus();
             }
+        }
+    }
+
+    public synchronized  void checkField() {
+        if (!userNameFieldIsEmpty()) {
+            if (!passwordFieldIsEmpty()) {
+                loginBtnClick();
+            } else {
+                focusPassField();
+                showError("Please enter a password");
+            }
+        } else {
+            focusUserNameField();
+            showError("Please enter a username!");
         }
     }
 
@@ -523,8 +631,15 @@ public class LoginView extends javax.swing.JFrame {
         return passwordField.getPassword().length == 0;
     }
 
+    public void getBuzzAlert() {
+        Toolkit.getDefaultToolkit().beep();
+    }
+
     public void addLoginListener(ActionListener listener) {
         loginBtn.addActionListener(listener);
+    }
+    public void addRegisterListener(ActionListener listerer){
+        registerBtn.addActionListener(listerer);
     }
 
     public void addEnterKeyTypedListener(KeyListener listener) {
@@ -542,6 +657,7 @@ public class LoginView extends javax.swing.JFrame {
     public void addPasswordFieldKeyTypedListener(KeyListener listener) {
         passwordField.addKeyListener(listener);
     }
+    
 
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
@@ -563,15 +679,16 @@ public class LoginView extends javax.swing.JFrame {
         nameField.requestFocus();
     }
 
-    public Boolean getRememberMeCBox() {
+    public Boolean getStatusRememberMeCBox() {
         return rememberMeCBox.isSelected();
     }
 
     public void setRememberCBoxIcon() {
-        if (getRememberMeCBox()) {
-            rememberMeCBox.setIcon(new ImageIcon(getClass().getResource("/images/checked_ckbox_x24.png")));        
+        if (getStatusRememberMeCBox()) {
+            rememberMeCBox.setIcon(new ImageIcon(getClass().getResource("/images/checked_ckbox_x24.png")));
+
         } else {
-            rememberMeCBox.setIcon(new ImageIcon(getClass().getResource("/images/unchecked_ckbox_x24.png")));           
+            rememberMeCBox.setIcon(new ImageIcon(getClass().getResource("/images/unchecked_ckbox_x24.png")));
         }
     }
 
@@ -602,7 +719,7 @@ public class LoginView extends javax.swing.JFrame {
             passwordField.setText(preference.get("passwordField", ""));
             rememberMeCBox.setSelected(true);
             rememberMeCBox.setIcon(new ImageIcon(getClass().getResource("/images/unchecked_ckbox_x24.png")));
-        } else {      
+        } else {
             rememberMeCBox.setIcon(new ImageIcon(getClass().getResource("/images/checked_ckbox_x24.png")));
 
         }
@@ -626,12 +743,15 @@ public class LoginView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField RememberMeField;
     private javax.swing.JTextField errorField;
     private javax.swing.JLabel exitMouse;
+    private javax.swing.JButton forgotPassBtn;
     private javax.swing.JPanel header;
     private javax.swing.JLabel headerIcon;
     private javax.swing.JLabel headerTitle;
     private javax.swing.JLabel infoIcon;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loginBtn;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JTextField nameField;
@@ -639,8 +759,8 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JLabel passwordLabelIcon;
     private javax.swing.JSeparator passwordSeparator;
     private javax.swing.JLabel reduceMouse;
+    private javax.swing.JButton registerBtn;
     private javax.swing.JCheckBox rememberMeCBox;
-    private javax.swing.JLabel rememberMeLabel;
     private javax.swing.JLabel userLabelIcon;
     private javax.swing.JSeparator userSeparator;
     // End of variables declaration//GEN-END:variables

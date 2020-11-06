@@ -1,18 +1,27 @@
-﻿CREATE DATABASE  qlsv_swing
+CREATE DATABASE  qlsv_swing
 GO
 USE qlsv_swing
 GO
+CREATE TABLE tblrole(
+id int identity PRIMARY KEY,
+role nvarchar(50) NOT NULL,
+CONSTRAINT IX_tblrole_role_unique UNIQUE(role)
+
+)
+
 CREATE TABLE tbluser(
 	id int identity PRIMARY KEY,
 	username nvarchar(20) NOT NULL UNIQUE,
 	password nvarchar(200)NOT NULL,
 	email varchar(50) null UNIQUE,
-	roleId int default 0,
+	roleId int ,
 	verifyCode int default null,
-	status  int default 1
+	status  int default 1,
+	CONSTRAINT FK_tblroldid FOREIGN KEY(roleId) REFERENCES tblrole(id)
 )
 GO
 
+DROP TABLE student
 CREATE TABLE student(
 	id varchar(20) NOT NULL PRIMARY KEY,
 	name nvarchar(50) NOT NULL,
@@ -33,8 +42,8 @@ CREATE INDEX ix_student_name
 ON student(name)
 GO
 
-ALTER TABLE tbluser
-DROP CONSTRAINT pinky;
+
+
 SELECT * FROM tbluser
 declare @name varchar(20) 'admin'
 IF EXISTS (SELECT* FROM tbluser where username LIKE '%admin%'  )
