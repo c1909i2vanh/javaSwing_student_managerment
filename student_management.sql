@@ -55,51 +55,148 @@ ALTER PROCEDURE sp_addnewuser(
 	@username varchar(20),
 	@password nvarchar(200),
 	@email varchar(50),
-	@mes nvarchar(100) OUTPUT,
-	@err nvarchar(100) output
-	
+	@mes nvarchar(100) OUTPUT
 )
 AS
-DECLARE @abc varchar(20),
- @abc1 varchar(20)
-
 	BEGIN 				
-		IF NOT EXISTS(select  username, email FROM tbluser where username LIKE @username OR email LIKE @email )
+		IF NOT EXISTS(select   username,   email FROM tbluser where username LIKE @username OR email LIKE @email )
 			
-					BEGIN 		
-					INSERT INTO tbluser(username,password,email) VALUES(@username,@password,@email)
-					IF @@ROWCOUNT =1
-						BEGIN 
-							print 'them moi thanh cong';
-							SET @mes = 'Đăng ký thành công';
-						END
-					ELSE
-						BEGIN
-							print 'them moi that bai';
-							SET @mes = 'Đăng ký thất bại!Xin kiểm tra lại';
-						END
+			BEGIN 		
+				INSERT INTO tbluser(username,password,email) VALUES(@username,@password,@email)
+				IF @@ROWCOUNT =1
+					BEGIN 							
+						SET @mes = 'Đăng ký thành công';
 					END
-		ELSE			
-			IF @abc IS NOT NULL
-
-				BEGIN
-				SET @err = @abc;
-					print 'ten dang nhap ton tai! moi that bai';
-					SET @mes  ='Username đã tồn tại! Vui lòng nhập lại';
-					print @err;
-				END
-			ELSE 
-			BEGIN
-				SET @err = @abc;
-					print 'ten dang nhap ton ta1111111i! moi that bai';
-					SET @mes  ='Username đã tồn tại! Vui lòng nhập lại';
-					print @err;
-				END
+				ELSE
+					BEGIN						
+						SET @mes = 'Đăng ký thất bại!Xin kiểm tra lại';
+					END
+			END
+		ELSE					
+			BEGIN				
+					SET @mes = 'Đăng ký thất bại!Xin kiểm tra lại';					
+			END
 	END
 GO
 -- them tai khoan dau tien
 INSERT INTO tbluser(username,password,email) VALUES('admin9','123456','a@')
--- test thủ tục thêm tài khoản
-declare @username varchar(20),@pass nvarchar(200),@mail varchar(50),@mes nvarchar(100),@err nvarchar(100),@err1 nvarchar(220)
-EXEC sp_addnewuser 'admin9','123456','a',@mes OUTPUT,@err OUTPUT 
-select @mes,@err
+/*test thủ tục thêm tài khoản
+declare @username varchar(20),@pass nvarchar(200),@mail varchar(50),@mes nvarchar(100)
+EXEC sp_addnewuser 'admin8','123456','a@',@mes OUTPUT
+select @mes
+*/
+-- Thủ tục check tên đăng nhập
+CREATE PROC sp_check_username_exists(
+@username varchar(50),
+@messeage nvarchar(50) OUTPUT
+)
+AS
+BEGIN
+	IF  EXISTS( SELECT 1 FROM tbluser where username = @username)
+		BEGIN
+			SET @messeage = 'Username đã tồn tại! ';
+		END
+	ELSE
+		BEGIN
+			SET @messeage = '';
+			
+		END
+END
+GO
+/*
+select *from tbluser
+declare @user varchar(50),@mes nvarchar(50)
+EXEC sp_check_username_exists 'admin9',@mes OUTPUT
+SELECT @mes
+*/
+GO
+CREATE PROC sp_check_email_exists(
+@email varchar(50),
+@messeage nvarchar(50) OUTPUT
+)
+AS
+BEGIN
+	IF  EXISTS( SELECT 1 FROM tbluser where email = @email)
+		BEGIN
+			SET @messeage = 'Email đã tồn tại! ';
+		END
+	ELSE
+		BEGIN
+			SET @messeage = '';
+			
+		END
+END
+GO
+SELECT count(id) From tblstudent
+GO
+-- thủ tục đếm số sinh viên
+CREATE PROC sp_get_count_student
+@count int OUTPUT
+AS
+	BEGIN
+		SELECT id From tblstudent
+		set @count = @@ROWCOUNT
+	END
+	RETURN @count
+GO
+declare @i int;
+EXEC sp_get_count_student @i OUTput;
+SELECT @i;
+GO
+-- Thủ tục thêm mới sinh viên
+CREATE PROC sp_addST (
+	@id varchar(20),
+	@name nvarchar(50) ,
+	@age int ,
+	@gender smallint,
+	@address nvarchar(200),
+	@phone varchar(11) ,
+	@gpa float,
+	@status smallint,
+	@classid int
+)
+AS
+BEGIN
+INSERT INTO tblstudent VALUES(	@id,@name,@age,@gender,@address,@phone,@gpa,@status,@classid)
+END
+--Thủ tục lấy sinh viên theo Id
+CREATE PROCEDURE sp_get_Student_By_Id
+@id varchar(20)
+AS
+	BEGIN
+		SELECT *FROM tblstudent 
+		WHERE id = @id
+	END
+
+	DECLARE @id1 varchar(20);
+	EXEC sp_get_Student_By_Id 'B0002'
+GO
+-- Thủ tục cập nhật sinh viên
+CREATE PROC sp_editSt (
+	@id varchar(20),
+	@name nvarchar(50) ,
+	@age int ,
+	@gender smallint,
+	@address nvarchar(200),
+	@phone varchar(11) ,
+	@gpa float,
+	@status smallint,
+	@classid int
+)
+AS
+BEGIN
+UPDATE  tblstudent SET	name=@name,age=@age,gender=@gender,address=@address,phone=@phone,gpa=@gpa,status=@status,classid = @classid WHERE id=@id
+END
+GO
+--Thủ tục xóa sinh viên
+CREATE PROC sp_deleteSt(
+@id varchar(20),
+@status smallint
+)
+
+AS
+BEGIN
+UPDATE tblstudent SET status = @status WHERE id = @id
+END
+
+
