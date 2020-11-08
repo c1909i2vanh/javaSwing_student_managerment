@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package qlsv_swing.dao;
+package  student_management.dao;
 
 
 import java.util.List;
-import qlsv_swing.entity.Student;
+import  student_management.entities.Student;
 
 /**
  *

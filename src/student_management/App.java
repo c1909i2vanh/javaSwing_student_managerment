@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package qlsv_swing;
+package  student_management;
 
-import com.sun.javafx.css.Stylesheet;
-import com.sun.javafx.css.parser.CSSParser;
-import java.awt.EventQueue;
-import qlsv_swing.controller.LoginController;
-import qlsv_swing.dao.ILogin;
-import qlsv_swing.view.LoginView;
-import qlsv_swing.view.LoginView2;
-import qlsv_swing.view.RegisterView;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
+import  student_management.controller.LoginController;
+import  student_management.dao.ILogin;
+import  student_management.view.LoginView;
+import  student_management.view.RegisterView;
 
 /**
  *
@@ -24,13 +24,18 @@ public class App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
 
             @Override
             public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 LoginView view = new LoginView();
                 ILogin controller = new LoginController(view);                     
-                controller.showLoginView();         
+                controller.showLoginView();                
             }
 
         });

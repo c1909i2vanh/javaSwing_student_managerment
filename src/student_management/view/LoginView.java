@@ -3,23 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package qlsv_swing.view;
+package student_management.view;
 
-import com.sun.glass.events.KeyEvent;
+
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.Frame;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
-import qlsv_swing.entity.User;
+import student_management.entities.User;
 
 /**
  *
@@ -36,13 +33,20 @@ public class LoginView extends javax.swing.JFrame {
     public LoginView() {
         this.setUndecorated(true);
         initComponents();
-
         this.setLocationRelativeTo(null);
         rememberMe();
         ImageIcon img = new ImageIcon(getClass().getResource("/images/blue_school_24.png"));
         this.setIconImage(img.getImage());
         this.focusUserNameField();
         this.setEnabled(true);
+    }
+
+    public void startLogin() {
+        this.setVisible(true);
+        this.focusUserNameField();
+        this.viewCustomStyle();
+        this.setRememberCBoxIcon();
+        
     }
 
     /**
@@ -58,8 +62,8 @@ public class LoginView extends javax.swing.JFrame {
         header = new javax.swing.JPanel();
         headerTitle = new javax.swing.JLabel();
         reduceMouse = new javax.swing.JLabel();
-        exitMouse = new javax.swing.JLabel();
         headerIcon = new javax.swing.JLabel();
+        exitMouse = new javax.swing.JButton();
         nameField = new javax.swing.JTextField();
         passwordField = new javax.swing.JPasswordField();
         userLabelIcon = new javax.swing.JLabel();
@@ -108,8 +112,8 @@ public class LoginView extends javax.swing.JFrame {
         headerTitle.setText("Login Form");
 
         reduceMouse.setBackground(new java.awt.Color(135, 240, 251));
-        reduceMouse.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        reduceMouse.setForeground(new java.awt.Color(255, 255, 255));
+        reduceMouse.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
+        reduceMouse.setForeground(new java.awt.Color(102, 102, 102));
         reduceMouse.setText("  -");
         reduceMouse.setOpaque(true);
         reduceMouse.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -124,16 +128,16 @@ public class LoginView extends javax.swing.JFrame {
             }
         });
 
+        headerIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/white_school_24.png"))); // NOI18N
+
         exitMouse.setBackground(new java.awt.Color(135, 240, 251));
-        exitMouse.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        exitMouse.setForeground(new java.awt.Color(255, 255, 255));
-        exitMouse.setText(" X");
-        exitMouse.setToolTipText("Exit");
+        exitMouse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/delete_32px.png"))); // NOI18N
+        exitMouse.setBorder(null);
+        exitMouse.setBorderPainted(false);
+        exitMouse.setContentAreaFilled(false);
+        exitMouse.setFocusPainted(false);
         exitMouse.setOpaque(true);
         exitMouse.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                exitMouseMouseClicked(evt);
-            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 exitMouseMouseEntered(evt);
             }
@@ -141,8 +145,11 @@ public class LoginView extends javax.swing.JFrame {
                 exitMouseMouseExited(evt);
             }
         });
-
-        headerIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/white_school_24.png"))); // NOI18N
+        exitMouse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMouseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
         header.setLayout(headerLayout);
@@ -151,25 +158,27 @@ public class LoginView extends javax.swing.JFrame {
             .addGroup(headerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(headerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
                 .addComponent(headerTitle)
-                .addGap(121, 121, 121)
+                .addGap(111, 111, 111)
                 .addComponent(reduceMouse, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(exitMouse, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
+            .addGroup(headerLayout.createSequentialGroup()
                 .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(headerLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(headerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(exitMouse)
                         .addComponent(reduceMouse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(headerTitle)))
                 .addGap(3, 3, 3))
+            .addGroup(headerLayout.createSequentialGroup()
+                .addComponent(exitMouse)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         nameField.setText("User");
@@ -321,7 +330,6 @@ public class LoginView extends javax.swing.JFrame {
         forgotPassBtn.setContentAreaFilled(false);
         forgotPassBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         forgotPassBtn.setFocusPainted(false);
-        forgotPassBtn.setOpaque(false);
         forgotPassBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 forgotPassBtnMouseClicked(evt);
@@ -338,51 +346,53 @@ public class LoginView extends javax.swing.JFrame {
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+            .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGap(64, 64, 64)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(userLabelIcon)
-                    .addComponent(passwordLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addComponent(errorField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(67, 67, 67))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                                .addComponent(rememberMeCBox)
-                                .addGap(18, 18, 18)
-                                .addComponent(RememberMeField, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(forgotPassBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(userSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                                    .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                                    .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                                    .addComponent(passwordSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE))))
-                        .addGap(50, 50, 50)))
-                .addComponent(infoIcon)
-                .addGap(32, 32, 32))
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(202, 202, 202)
-                        .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGap(138, 138, 138)
+                                .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGap(103, 103, 103)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(registerBtn)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(167, 167, 167)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(registerBtn)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(userLabelIcon)
+                            .addComponent(passwordLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                                .addComponent(errorField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(67, 67, 67))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(mainPanelLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                                        .addComponent(rememberMeCBox)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(RememberMeField, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(forgotPassBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(mainPanelLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(userSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                                            .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                                            .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                                            .addComponent(passwordSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE))))
+                                .addGap(50, 50, 50)))
+                        .addComponent(infoIcon)
+                        .addGap(32, 32, 32))))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(18, 18, 18)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -414,7 +424,7 @@ public class LoginView extends javax.swing.JFrame {
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(registerBtn))
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -438,29 +448,12 @@ public class LoginView extends javax.swing.JFrame {
 
     private void reduceMouseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reduceMouseMouseExited
         reduceMouse.setBackground(new Color(135, 240, 251));
-        reduceMouse.setForeground(new Color(255, 255, 255));
+        reduceMouse.setForeground(new Color(102,102,102));
     }//GEN-LAST:event_reduceMouseMouseExited
-
-    private void exitMouseMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseEntered
-        exitMouse.setBackground(new Color(105, 105, 105));
-        exitMouse.setForeground(new Color(255, 255, 255));
-
-
-    }//GEN-LAST:event_exitMouseMouseEntered
-
-    private void exitMouseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseExited
-        exitMouse.setBackground(new Color(135, 240, 251));
-        exitMouse.setForeground(new Color(255, 255, 255));
-
-    }//GEN-LAST:event_exitMouseMouseExited
 
     private void reduceMouseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reduceMouseMouseClicked
         this.setState(JFrame.ICONIFIED);
     }//GEN-LAST:event_reduceMouseMouseClicked
-
-    private void exitMouseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseClicked
-        this.dispose();
-    }//GEN-LAST:event_exitMouseMouseClicked
     int xx;
     int xy;
     private void headerMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerMouseDragged
@@ -564,34 +557,49 @@ public class LoginView extends javax.swing.JFrame {
     }//GEN-LAST:event_RememberMeFieldMouseClicked
 
     private void mainPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainPanelMouseClicked
-        System.out.println("a");
+
     }//GEN-LAST:event_mainPanelMouseClicked
 
     private void forgotPassBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forgotPassBtnActionPerformed
-      forgotPassBtn.setBackground(Color.WHITE);
-        System.out.println("a");
+
+
     }//GEN-LAST:event_forgotPassBtnActionPerformed
 
     private void forgotPassBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forgotPassBtnMouseClicked
-        forgotPassBtn.setBackground(Color.WHITE);
-      
+        //ForgotPassView fps = new ForgotPassView();
+//        fps.setLocationRelativeTo(this);
+//
+//        this.setLoginEnabled();
+
+
     }//GEN-LAST:event_forgotPassBtnMouseClicked
+
+    private void exitMouseMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseEntered
+        exitMouse.setBackground(new Color(228, 38, 69));
+        exitMouse.setForeground(Color.WHITE);
+    }//GEN-LAST:event_exitMouseMouseEntered
+
+    private void exitMouseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseExited
+        exitMouse.setBackground(new Color(135, 240, 251));
+        exitMouse.setForeground(new Color(255, 255, 255));
+    }//GEN-LAST:event_exitMouseMouseExited
+
+    private void exitMouseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMouseActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_exitMouseActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public void startLogin() {
-        this.setVisible(true);
-        this.focusUserNameField();
-        this.viewCustomStyle();
-        this.setRememberCBoxIcon();
-    }
-
     public void closeLogin() {
         this.setVisible(false);
     }
 
-    public  void focusField() {
+    public void setLoginEnabled() {
+        this.setEnabled(isEnabled());
+    }
+
+    public void focusField() {
         if (nameField.getText().trim().equals("")) {
             nameField.requestFocus();
         } else {
@@ -603,7 +611,7 @@ public class LoginView extends javax.swing.JFrame {
         }
     }
 
-    public synchronized  void checkField() {
+    public synchronized void checkField() {
         if (!userNameFieldIsEmpty()) {
             if (!passwordFieldIsEmpty()) {
                 loginBtnClick();
@@ -638,7 +646,8 @@ public class LoginView extends javax.swing.JFrame {
     public void addLoginListener(ActionListener listener) {
         loginBtn.addActionListener(listener);
     }
-    public void addRegisterListener(ActionListener listerer){
+
+    public void addRegisterListener(ActionListener listerer) {
         registerBtn.addActionListener(listerer);
     }
 
@@ -657,7 +666,14 @@ public class LoginView extends javax.swing.JFrame {
     public void addPasswordFieldKeyTypedListener(KeyListener listener) {
         passwordField.addKeyListener(listener);
     }
-    
+
+    public void addForgotPassListener(ActionListener listener) {
+        forgotPassBtn.addActionListener(listener);
+    }
+
+    public Component getLoginComponent() {
+        return this;
+    }
 
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
@@ -745,7 +761,7 @@ public class LoginView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField RememberMeField;
     private javax.swing.JTextField errorField;
-    private javax.swing.JLabel exitMouse;
+    private javax.swing.JButton exitMouse;
     private javax.swing.JButton forgotPassBtn;
     private javax.swing.JPanel header;
     private javax.swing.JLabel headerIcon;
@@ -764,4 +780,5 @@ public class LoginView extends javax.swing.JFrame {
     private javax.swing.JLabel userLabelIcon;
     private javax.swing.JSeparator userSeparator;
     // End of variables declaration//GEN-END:variables
+
 }

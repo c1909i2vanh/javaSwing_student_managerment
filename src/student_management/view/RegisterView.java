@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package qlsv_swing.view;
+package student_management.view;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import javax.swing.JFrame;
 
 /**
@@ -17,17 +18,16 @@ public class RegisterView extends javax.swing.JFrame {
     /**
      * Creates new form LoginView1
      */
-     
     public RegisterView() {
         initComponents();
-        
-          this.setVisible(false);
+
+        this.setVisible(false);
         // this.setLocationRelativeTo();
     }
-     
-    public void startLogin(){
-          this.setVisible(true);
-       
+
+    public void startLogin() {
+        this.setVisible(true);
+
     }
 
     /**
@@ -41,10 +41,10 @@ public class RegisterView extends javax.swing.JFrame {
 
         jTextField1 = new javax.swing.JTextField();
         RegisterMainpanel = new javax.swing.JPanel();
-        MainPanel = new javax.swing.JPanel();
+        header = new javax.swing.JPanel();
         prevBtn = new javax.swing.JButton();
-        reduceMouse = new javax.swing.JLabel();
-        exitMouse = new javax.swing.JLabel();
+        headerTitlte = new javax.swing.JLabel();
+        exitMouse = new javax.swing.JTextField();
         usernameLabel = new javax.swing.JLabel();
         usernameField = new javax.swing.JTextField();
         errUsername = new javax.swing.JTextField();
@@ -65,8 +65,18 @@ public class RegisterView extends javax.swing.JFrame {
         RegisterMainpanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         RegisterMainpanel.setForeground(new java.awt.Color(255, 255, 255));
 
-        MainPanel.setBackground(new java.awt.Color(153, 255, 255));
-        MainPanel.setForeground(new java.awt.Color(255, 255, 255));
+        header.setBackground(new java.awt.Color(153, 255, 255));
+        header.setForeground(new java.awt.Color(255, 255, 255));
+        header.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                headerMouseDragged(evt);
+            }
+        });
+        header.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                headerMousePressed(evt);
+            }
+        });
 
         prevBtn.setBackground(new java.awt.Color(153, 255, 255));
         prevBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/left_arrow_32px.png"))); // NOI18N
@@ -90,32 +100,19 @@ public class RegisterView extends javax.swing.JFrame {
             }
         });
 
-        reduceMouse.setBackground(new java.awt.Color(153, 255, 255));
-        reduceMouse.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        reduceMouse.setText(" -");
-        reduceMouse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        reduceMouse.setOpaque(true);
-        reduceMouse.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                reduceMouseMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                reduceMouseMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                reduceMouseMouseExited(evt);
-            }
-        });
+        headerTitlte.setBackground(new java.awt.Color(255, 255, 255));
+        headerTitlte.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        headerTitlte.setForeground(new java.awt.Color(51, 51, 51));
+        headerTitlte.setText("Register");
 
+        exitMouse.setEditable(false);
         exitMouse.setBackground(new java.awt.Color(153, 255, 255));
         exitMouse.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        exitMouse.setForeground(new java.awt.Color(102, 102, 102));
         exitMouse.setText(" X");
-        exitMouse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        exitMouse.setOpaque(true);
+        exitMouse.setBorder(null);
+        exitMouse.setMargin(new java.awt.Insets(0, 0, 0, 0));
         exitMouse.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                exitMouseMouseClicked(evt);
-            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 exitMouseMouseEntered(evt);
             }
@@ -123,28 +120,29 @@ public class RegisterView extends javax.swing.JFrame {
                 exitMouseMouseExited(evt);
             }
         });
+        exitMouse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMouseActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout MainPanelLayout = new javax.swing.GroupLayout(MainPanel);
-        MainPanel.setLayout(MainPanelLayout);
-        MainPanelLayout.setHorizontalGroup(
-            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MainPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
+        header.setLayout(headerLayout);
+        headerLayout.setHorizontalGroup(
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerLayout.createSequentialGroup()
                 .addComponent(prevBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 352, Short.MAX_VALUE)
-                .addComponent(reduceMouse, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(exitMouse, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(139, 139, 139)
+                .addComponent(headerTitlte)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(exitMouse, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        MainPanelLayout.setVerticalGroup(
-            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MainPanelLayout.createSequentialGroup()
-                .addGroup(MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MainPanelLayout.createSequentialGroup()
-                        .addComponent(prevBtn)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(reduceMouse, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(exitMouse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+        headerLayout.setVerticalGroup(
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(headerTitlte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(prevBtn))
+            .addComponent(exitMouse, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         usernameLabel.setText("Username");
@@ -182,12 +180,16 @@ public class RegisterView extends javax.swing.JFrame {
         jButton1.setText("Register");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.setFocusPainted(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout RegisterMainpanelLayout = new javax.swing.GroupLayout(RegisterMainpanel);
         RegisterMainpanel.setLayout(RegisterMainpanelLayout);
         RegisterMainpanelLayout.setHorizontalGroup(
             RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MainPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(RegisterMainpanelLayout.createSequentialGroup()
                 .addGroup(RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(RegisterMainpanelLayout.createSequentialGroup()
@@ -197,25 +199,27 @@ public class RegisterView extends javax.swing.JFrame {
                             .addComponent(passwordLabel)
                             .addComponent(confirmPasswordLabel))
                         .addGap(58, 58, 58)
-                        .addGroup(RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(usernameField)
-                            .addComponent(confirmPassField)
-                            .addComponent(passwordField)
-                            .addGroup(RegisterMainpanelLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(errUsername)
-                                    .addComponent(errorConfirmPass, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
-                                    .addComponent(errorPassword)))))
+                        .addGroup(RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(usernameField)
+                                .addComponent(passwordField)
+                                .addGroup(RegisterMainpanelLayout.createSequentialGroup()
+                                    .addGap(10, 10, 10)
+                                    .addGroup(RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(errUsername)
+                                        .addComponent(errorConfirmPass, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                                        .addComponent(errorPassword))))
+                            .addComponent(confirmPassField, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(RegisterMainpanelLayout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
+            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         RegisterMainpanelLayout.setVerticalGroup(
             RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RegisterMainpanelLayout.createSequentialGroup()
-                .addComponent(MainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(usernameLabel)
@@ -230,8 +234,8 @@ public class RegisterView extends javax.swing.JFrame {
                 .addComponent(errorPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(RegisterMainpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(confirmPassField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(confirmPasswordLabel))
+                    .addComponent(confirmPasswordLabel)
+                    .addComponent(confirmPassField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(errorConfirmPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
@@ -254,51 +258,52 @@ public class RegisterView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void prevBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevBtnActionPerformed
-    
-     this.dispose();
+
+        this.dispose();
     }//GEN-LAST:event_prevBtnActionPerformed
 
     private void prevBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prevBtnMouseEntered
-      prevBtn.setBackground(new Color(204,255,255));
+        prevBtn.setBackground(new Color(204, 255, 255));
     }//GEN-LAST:event_prevBtnMouseEntered
 
     private void prevBtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prevBtnMouseExited
-      prevBtn.setBackground(new Color(153,255,255));
+        prevBtn.setBackground(new Color(153, 255, 255));
     }//GEN-LAST:event_prevBtnMouseExited
-
-    private void reduceMouseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reduceMouseMouseClicked
-        this.setState(JFrame.ICONIFIED);
-    }//GEN-LAST:event_reduceMouseMouseClicked
-
-    private void reduceMouseMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reduceMouseMouseEntered
-        reduceMouse.setBackground(new Color(220,220,220));
-         reduceMouse.setForeground(Color.WHITE);
-    }//GEN-LAST:event_reduceMouseMouseEntered
-
-    private void reduceMouseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reduceMouseMouseExited
-        reduceMouse.setBackground(new Color(153,255,255));
-         reduceMouse.setForeground(new Color(0,0,0));
-    }//GEN-LAST:event_reduceMouseMouseExited
-
-    private void exitMouseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseClicked
-        
-    }//GEN-LAST:event_exitMouseMouseClicked
-
-    private void exitMouseMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseEntered
-        exitMouse.setBackground(new Color(254,150,150));
-                 exitMouse.setForeground(Color.WHITE);
-
-    }//GEN-LAST:event_exitMouseMouseEntered
-
-    private void exitMouseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseExited
-        exitMouse.setBackground(new Color(153,255,255));
-                 exitMouse.setForeground(new Color(0,0,0));
-
-    }//GEN-LAST:event_exitMouseMouseExited
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_passwordFieldActionPerformed
+    int xx;
+    int xy;
+    private void headerMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerMousePressed
+        xx = evt.getX();
+        xy = evt.getY();
+    }//GEN-LAST:event_headerMousePressed
+
+    private void headerMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_headerMouseDragged
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        this.setLocation(x - xx, y - xy);
+        header.setCursor(new Cursor(13));
+    }//GEN-LAST:event_headerMouseDragged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void exitMouseMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseEntered
+        exitMouse.setBackground(new Color(228, 38, 69));
+        exitMouse.setForeground(Color.WHITE);
+    }//GEN-LAST:event_exitMouseMouseEntered
+
+    private void exitMouseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseMouseExited
+        exitMouse.setBackground(new Color(153, 255, 255));
+        exitMouse.setForeground(new Color(0, 0, 0));
+    }//GEN-LAST:event_exitMouseMouseExited
+
+    private void exitMouseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMouseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_exitMouseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -337,20 +342,20 @@ public class RegisterView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel MainPanel;
     private javax.swing.JPanel RegisterMainpanel;
     private javax.swing.JPasswordField confirmPassField;
     private javax.swing.JLabel confirmPasswordLabel;
     private javax.swing.JTextField errUsername;
     private javax.swing.JTextField errorConfirmPass;
     private javax.swing.JTextField errorPassword;
-    private javax.swing.JLabel exitMouse;
+    private javax.swing.JTextField exitMouse;
+    private javax.swing.JPanel header;
+    private javax.swing.JLabel headerTitlte;
     private javax.swing.JButton jButton1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JButton prevBtn;
-    private javax.swing.JLabel reduceMouse;
     private javax.swing.JTextField usernameField;
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables

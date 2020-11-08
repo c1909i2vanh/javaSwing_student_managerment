@@ -3,20 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package qlsv_swing.controller;
+package student_management.controller;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import qlsv_swing.dao.ILogin;
+import student_management.dao.ILogin;
 
-import qlsv_swing.dao.UserDao;
-import qlsv_swing.entity.User;
-import qlsv_swing.view.LoginView;
-import qlsv_swing.view.LoginView2;
-import qlsv_swing.view.RegisterView;
-import qlsv_swing.view.StudentView;
+import student_management.dao.UserDao;
+import student_management.entities.User;
+import student_management.view.ForgotPassView;
+import student_management.view.LoginView;
+import student_management.view.RegisterView;
+import student_management.view.StudentView;
 
 /**
  *
@@ -28,7 +29,8 @@ public class LoginController implements ILogin {
     private static LoginView loginView;
     private static StudentView studentView;
     private static Boolean status;
-    private static RegisterView rs;
+    private static RegisterView registerView;
+    private static ForgotPassView forgotPassView;
 
     public LoginController(LoginView view) {
         this.loginView = view;
@@ -39,24 +41,21 @@ public class LoginController implements ILogin {
         view.addUserFieldKeyTypedListener(new UserTextFieldKeyPressedListener());
         view.addPasswordFieldKeyTypedListener(new PasswordTextFieldKeyPressedListener());
         view.addRegisterListener(new ShowHideRegisterViewListener());
+        view.addForgotPassListener(new ForgotPasswordViewListener() );
     }
 
-//    public LoginController(RegisterView view) {
-//        this.rs = view;
-//        this.userDao = new UserDao();
-//      //  view.addLoginListener(new LoginListener());
-//        //  view.addEnterKeyLoginListener(new EnterKeyPressedListener());
-//        //   view.addEnterKeyTypedListener(new EnterKeyPressedListener());
-//        //  view.addUserFieldKeyTypedListener(new UserTextFieldKeyPressedListener());
-//        // view.addPasswordFieldKeyTypedListener(new PasswordTextFieldKeyPressedListener());
-//    }
+  
     @Override
     public void showLoginView() {
         loginView.startLogin();
     }
 
     public void showRegisterView() {
-        rs.startLogin();
+        registerView.startLogin();
+    }
+
+    public void showForgotPassView() {
+
     }
 
     public static Boolean getStatus() {
@@ -69,7 +68,7 @@ public class LoginController implements ILogin {
 
     @Override
     public void close() {
-       loginView.closeLogin();
+        loginView.closeLogin();
     }
 
     private static class LoginListener implements ActionListener {
@@ -103,7 +102,6 @@ public class LoginController implements ILogin {
 
         @Override
         public void keyPressed(KeyEvent e) {
-
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 if (!loginView.userNameFieldIsEmpty()) {
                     loginView.focusPassField();
@@ -202,4 +200,16 @@ public class LoginController implements ILogin {
         }
     }
 
+    private static class ForgotPasswordViewListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Component  loginComponent = loginView.getLoginComponent();
+            forgotPassView = new ForgotPassView();
+            ForgotPassController forgotController = new ForgotPassController(forgotPassView);
+            forgotController.showForgotPassView(loginComponent);
+            loginView.closeLogin();
+        }
+
+    }
 }

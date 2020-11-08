@@ -20,6 +20,7 @@ CREATE TABLE tbluser(
 	roleId int ,
 	verifyCode int default null,
 	status  int default 1,
+	daterelase date
 	CONSTRAINT FK_tblroldid FOREIGN KEY(roleId) REFERENCES tblrole(id)
 )
 GO
@@ -51,6 +52,58 @@ CREATE TABLE tblstudent(
 	CONSTRAINT IX_tblstudent_phone_unique UNIQUE(phone)
 )
 GO
+/*
+*	Procedure add verifycode
+*	Check if exists email  parameter
+	Then add verifyCode with in parameter
+	return output 0 error
+	Else return 1 error
+*/
+ALTER PROCEDURE sp_add_verifycode_password(
+	@email varchar(50),
+	@verifycode int,
+	@err int output
+	
+)
+AS
+	BEGIN 
+		IF EXISTS( SELECT * FROM tbluser where email LIKE @email AND status =1 )
+			BEGIN
+				UPDATE tbluser SET verifyCode = @verifycode WHERE email LIKE @email;
+				SET @err = 0;
+			END		
+		ELSE 
+			BEGIN
+			SET @err = 1;
+			END
+			
+	END
+
+GO
+SELECT * FROM tbluser
+declare @a varchar(50),@veri int,@err int 
+EXEC sp_add_verifycode_password 'truonggiang2298@gmail.com',1233,@err output
+select @err
+--************************
+--Procedure change password bằng email
+CREATE PROCEDURE sp_change_password_by_email(
+@email varchar(50),
+@password varchar(200)
+)
+AS
+	BEGIN
+		IF  EXISTS(select   1 FROM tbluser where email LIKE @email and status = 1 )
+			BEGIN
+				UPDATE tbluser SET password = @password WHERE email LIKE @email
+			END
+	END
+GO
+--TEST PROC
+declare @a varchar(50),@veri int
+EXEC sp_change_password_by_email 'truonggiang2298@gmail.com',1233333
+select * from tbluser
+
+--****************
 ALTER PROCEDURE sp_addnewuser(
 	@username varchar(20),
 	@password nvarchar(200),
@@ -78,6 +131,7 @@ AS
 			END
 	END
 GO
+
 -- them tai khoan dau tien
 INSERT INTO tbluser(username,password,email) VALUES('admin9','123456','a@')
 /*test thủ tục thêm tài khoản
@@ -112,21 +166,32 @@ SELECT @mes
 GO
 CREATE PROC sp_check_email_exists(
 @email varchar(50),
-@messeage nvarchar(50) OUTPUT
+@messenger nvarchar(50) OUTPUT
 )
 AS
 BEGIN
-	IF  EXISTS( SELECT 1 FROM tbluser where email = @email)
+	IF  EXISTS( SELECT 1 FROM tbluser where email LIKE @email and status =1)
 		BEGIN
-			SET @messeage = 'Email đã tồn tại! ';
+			SET @messenger = 'Email đã tồn tại! ';
 		END
 	ELSE
 		BEGIN
-			SET @messeage = '';
+			SET @messenger = '';
 			
 		END
 END
 GO
+
+--Tạo thủ tục lấy user by email
+CREATE PROCEDURE sp_get_user_byemail(
+@email varchar(50)
+)
+AS 
+	BEGIN
+	select TOP 1 *FROM tbluser where email = @email 
+	END
+GO
+SELECT * FROM tbluser
 SELECT count(id) From tblstudent
 GO
 -- thủ tục đếm số sinh viên
@@ -190,13 +255,12 @@ END
 GO
 --Thủ tục xóa sinh viên
 CREATE PROC sp_deleteSt(
-@id varchar(20),
-@status smallint
+	@id varchar(20),
+	@status smallint
 )
 
 AS
 BEGIN
-UPDATE tblstudent SET status = @status WHERE id = @id
+	UPDATE tblstudent SET status = @status WHERE id = @id
 END
-
-
+GO

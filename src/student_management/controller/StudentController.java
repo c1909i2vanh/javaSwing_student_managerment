@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package qlsv_swing.controller;
+package  student_management.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,10 +13,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
-import qlsv_swing.dao.IStudent;
-import qlsv_swing.dao.StudentDaoImpl;
-import qlsv_swing.entity.Student;
-import qlsv_swing.view.StudentView;
+import  student_management.dao.IStudent;
+import  student_management.dao.StudentDaoImpl;
+import  student_management.entities.Student;
+import  student_management.view.StudentView;
 
 /**
  *
@@ -26,14 +26,13 @@ public class StudentController {
 
     private static StudentDaoImpl studentDao;
     private static StudentView studentView;
+    private static IStudent studentDao1;
 
     StudentController(StudentView view) {
         this.studentView = view;
         studentDao = new StudentDaoImpl();
-
         //add mouseClicked to JTable
         view.addMouseClickedTable(new AddMouseClickToTableListener());
-
         //Add Action to button 
         view.addAddStudentListener(new AddStudentListener());
         view.addClearStudentListener(new ClearStudentListener());

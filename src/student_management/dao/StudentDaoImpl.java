@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package qlsv_swing.dao;
+package student_management.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import qlsv_swing.entity.Student;
+import student_management.entities.Student;
 
 /**
  *
@@ -27,7 +27,8 @@ public class StudentDaoImpl implements IStudent {
     private Connection connectStudent = null;
     CallableStatement cst = null;
     ResultSet rs;
-   List<Student> listStudents = new ArrayList<>();
+    List<Student> listStudents = new ArrayList<>();
+
     public StudentDaoImpl() {
 
     }
@@ -35,17 +36,17 @@ public class StudentDaoImpl implements IStudent {
     public void setConnectionStudent() {
         if (connectStudent == null) {
             // Kết nối tới Database qlsv_swing         
-            connectStudent = ConnectStudent.getConnetion();
+            connectStudent = new ConnectJdbc().getConnetion();
         }
     }
 
     @Override
     public List<Student> getListStudents() {
-    List<Student> listStudents = new ArrayList<>();
+        List<Student> listStudents = new ArrayList<>();
         try {
             if (connectStudent == null) {
                 setConnectionStudent();
-               
+
             }
             cst = connectStudent.prepareCall("{call sp_getAll}");
             rs = cst.executeQuery();
@@ -156,10 +157,11 @@ public class StudentDaoImpl implements IStudent {
             cst.setInt(8, st.getStatus());
             int number = cst.executeUpdate();
             System.out.println(st.toString());
-            if(number>0)
+            if (number > 0) {
                 System.out.println("OK");
-            else
+            } else {
                 System.out.println("Khong ok");
+            }
             closeConnect();
             closeCallable();
         } catch (SQLException ex) {
@@ -188,23 +190,21 @@ public class StudentDaoImpl implements IStudent {
 
     @Override
     public List<Student> sortStudentByName() {
-       List<Student>listStudents = new ArrayList<>();
-       listStudents=getListStudents();
-       Collections.sort(listStudents,(Student st1,Student st2)-> st2.getName().compareTo(st1.getName()));
-    
-       
+        List<Student> listStudents = new ArrayList<>();
+        listStudents = getListStudents();
+        Collections.sort(listStudents, (Student st1, Student st2) -> st2.getName().compareTo(st1.getName()));
+
         return listStudents;
     }
 
     @Override
     public List<Student> sortStudentByGPA() {
-        List<Student>listStudents = new ArrayList<>();
-      
-          listStudents= getListStudents();
-    
-       
-       Collections.sort(listStudents,(Student st1,Student st2)-> Float.compare(st1.getGpa(), st2.getGpa()));
-        
+        List<Student> listStudents = new ArrayList<>();
+
+        listStudents = getListStudents();
+
+        Collections.sort(listStudents, (Student st1, Student st2) -> Float.compare(st1.getGpa(), st2.getGpa()));
+
         return listStudents;
     }
 
@@ -212,7 +212,7 @@ public class StudentDaoImpl implements IStudent {
         try {
             if (connectStudent != null) {
                 connectStudent.close();
-             
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -224,7 +224,7 @@ public class StudentDaoImpl implements IStudent {
         if (cst != null) {
             try {
                 cst.close();
-               
+
             } catch (SQLException ex) {
                 Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -236,7 +236,7 @@ public class StudentDaoImpl implements IStudent {
         if (rs != null) {
             try {
                 rs.close();
-                
+
             } catch (SQLException ex) {
                 Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             }

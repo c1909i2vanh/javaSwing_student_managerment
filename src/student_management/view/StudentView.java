@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package qlsv_swing.view;
+package  student_management.view;
 
 import java.awt.Dimension;
 
@@ -30,9 +30,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import qlsv_swing.controller.StudentController;
+import  student_management.controller.StudentController;
 
-import qlsv_swing.entity.Student;
+import  student_management.entities.Student;
 
 /**
  *
