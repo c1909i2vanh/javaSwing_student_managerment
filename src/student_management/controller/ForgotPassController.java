@@ -174,33 +174,7 @@ public class ForgotPassController implements ILogin {
 
     }
 
-    private static class ExitMouseResetListener implements MouseListener {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            loginView = new LoginView();
-            LoginController controller = new LoginController(loginView);
-            controller.showLoginView();
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
-
-    }
+  
 
     private static class BackToLoginListener implements ActionListener {
 
