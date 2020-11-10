@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package  student_management.dao;
+package student_management.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,23 +15,38 @@ import java.util.logging.Logger;
  *
  * @author GIANG
  */
-public class ConnectJdbc implements IConnect {
+public class DatabaseConnection implements IDatabaseConnection {
 
+    private static DatabaseConnection instance;
+    private Connection connection;
     private static final String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=student_management_java";
     private static final String USER = "sa";
     private static final String PASSWORD = "1";
 
-    public  Connection getConnetion() {
-        Connection conn = null;
-        if (conn == null) {
-            try {
-                Class.forName(DRIVER);
-                conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            } catch (ClassNotFoundException | SQLException ex) {
-                Logger.getLogger(ConnectJdbc.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    private DatabaseConnection() throws SQLException {
+        try {
+            Class.forName(DRIVER);
+            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Database Connection Creation Failed : " + ex.getMessage());
         }
-        return conn;
+
     }
+
+    @Override
+    public Connection getConnetion() {
+        return connection;
+    }
+
+    public static DatabaseConnection getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new DatabaseConnection();
+        } else if (instance.getConnetion().isClosed()) {
+            instance = new DatabaseConnection();
+        }
+        return instance;
+    }
+   
 }

@@ -46,7 +46,6 @@ public class ForgotPassView extends javax.swing.JFrame {
         MainPanel1 = new javax.swing.JPanel();
         mainPanel = new javax.swing.JPanel();
         forgotPassPanel = new javax.swing.JPanel();
-        verifyBtn = new javax.swing.JButton();
         emailField = new javax.swing.JTextField();
         emailLabel = new javax.swing.JLabel();
         verifyLabel = new javax.swing.JLabel();
@@ -85,16 +84,6 @@ public class ForgotPassView extends javax.swing.JFrame {
         mainPanel.setLayout(new java.awt.CardLayout());
 
         forgotPassPanel.setBackground(new java.awt.Color(255, 255, 255));
-
-        verifyBtn.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        verifyBtn.setForeground(new java.awt.Color(102, 102, 102));
-        verifyBtn.setText("Verify");
-        verifyBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        verifyBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                verifyBtnActionPerformed(evt);
-            }
-        });
 
         emailField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -224,12 +213,10 @@ public class ForgotPassView extends javax.swing.JFrame {
                             .addComponent(emailLabel)
                             .addComponent(verifyLabel))
                         .addGap(14, 14, 14)
-                        .addGroup(forgotPassPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(verifyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(forgotPassPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(sendCodeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(verifyField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(forgotPassPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(sendCodeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(verifyField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(forgotPassPanelLayout.createSequentialGroup()
                         .addGroup(forgotPassPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,9 +244,7 @@ public class ForgotPassView extends javax.swing.JFrame {
                     .addComponent(verifyLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(errorForgot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(verifyBtn)
-                .addGap(20, 20, 20))
+                .addGap(68, 68, 68))
         );
 
         mainPanel.add(forgotPassPanel, "card2");
@@ -532,10 +517,6 @@ public class ForgotPassView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void verifyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verifyBtnActionPerformed
-
-    }//GEN-LAST:event_verifyBtnActionPerformed
-
     private void sendCodeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendCodeBtnActionPerformed
 
     }//GEN-LAST:event_sendCodeBtnActionPerformed
@@ -681,9 +662,7 @@ public class ForgotPassView extends javax.swing.JFrame {
         sendCodeBtn.addActionListener(listener);
     }
 
-    public void addVerifyCodeListener(ActionListener listener) {
-        verifyBtn.addActionListener(listener);
-    }
+ 
 
     public void addNextToStepListener(ActionListener listener) {
         nextBtn.addActionListener(listener);
@@ -767,7 +746,6 @@ public class ForgotPassView extends javax.swing.JFrame {
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JPanel resetPasswordPanel;
     private javax.swing.JButton sendCodeBtn;
-    private javax.swing.JButton verifyBtn;
     private javax.swing.JTextField verifyField;
     private javax.swing.JLabel verifyLabel;
     // End of variables declaration//GEN-END:variables
@@ -802,14 +780,14 @@ public class ForgotPassView extends javax.swing.JFrame {
         disableFinishBtn();
         disableBackBtn();
         disableNextBtn();
-        disableVerifyBtn();
+       
         showNotify("Please enter your email!");
     }
     public void backToForgotView(){
     forgotPassPanel.setVisible(true);       
         disableFinishBtn();
         disableBackBtn();     
-        disableVerifyBtn();
+   
         disableSendCodeBtn();
     }
 
@@ -900,19 +878,15 @@ public class ForgotPassView extends javax.swing.JFrame {
         backBtn.setEnabled(true);
     }
 
-    public void disableVerifyBtn() {
-        verifyBtn.setEnabled(false);
-    }
+   
 
-    public void enableVerifyBtn() {
-        verifyBtn.setEnabled(true);
-    }
+    
 
     public void disableEmailField() {
         this.emailField.setEnabled(false);
     }
 
-    public void showErrorForgot(String error) {
+    public void showError(String error) {
         errorForgot.setText(error);
 
     }
@@ -944,11 +918,12 @@ public class ForgotPassView extends javax.swing.JFrame {
         String regexEmail = "^\\w+([+.-]\\w+)*@\\w+([.-]\\w+)*[.]\\w+([.-]\\w+)*$";
         Pattern p = Pattern.compile(regexEmail);
         Matcher matcher = p.matcher(email);
+        
         return matcher.matches();
     }
 
     public boolean regexVerifyCode(String code) {
-        String regexCode = "^[0-9]{6}$";
+        String regexCode = "^[\\d]{6}$";
         Pattern p = Pattern.compile(regexCode);
         Matcher matcher = p.matcher(code);
         return matcher.matches();

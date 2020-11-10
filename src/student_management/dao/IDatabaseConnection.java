@@ -11,6 +11,6 @@ import java.sql.Connection;
  *
  * @author GIANG
  */
-public interface IConnect {
+public interface IDatabaseConnection {
        public  Connection getConnetion() ;
 }

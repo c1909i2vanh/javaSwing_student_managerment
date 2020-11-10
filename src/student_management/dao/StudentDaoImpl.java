@@ -24,7 +24,7 @@ import student_management.entities.Student;
  */
 public class StudentDaoImpl implements IStudent {
 
-    private Connection connectStudent = null;
+    private Connection databaseConnection;
     CallableStatement cst = null;
     ResultSet rs;
     List<Student> listStudents = new ArrayList<>();
@@ -33,22 +33,14 @@ public class StudentDaoImpl implements IStudent {
 
     }
 
-    public void setConnectionStudent() {
-        if (connectStudent == null) {
-            // Kết nối tới Database qlsv_swing         
-            connectStudent = new ConnectJdbc().getConnetion();
-        }
-    }
-
     @Override
     public List<Student> getListStudents() {
         List<Student> listStudents = new ArrayList<>();
         try {
-            if (connectStudent == null) {
-                setConnectionStudent();
 
-            }
-            cst = connectStudent.prepareCall("{call sp_getAll}");
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+
+            cst = databaseConnection.prepareCall("{call sp_getAll}");
             rs = cst.executeQuery();
             while (rs.next()) {
 
@@ -74,11 +66,10 @@ public class StudentDaoImpl implements IStudent {
     @Override
     public void add(Student st) {
         try {
-            //    thủ tục lấy số bản ghi trong csdl         
-            if (connectStudent == null) {
-                setConnectionStudent();
-            }
-            cst = connectStudent.prepareCall("{call sp_get_count_student(?)}");
+            //    thủ tục lấy số bản ghi trong csdl               
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+
+            cst = databaseConnection.prepareCall("{call sp_get_count_student(?)}");
             // đăng ký tham số đầu ra
             cst.registerOutParameter(1, Types.INTEGER);
             // chạy thủ tục
@@ -91,9 +82,9 @@ public class StudentDaoImpl implements IStudent {
             // đóng kết nối
             closeConnect();
             closeCallable();
-            setConnectionStudent();
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
             String sql = "{call sp_addST(?,?,?,?,?,?,?,?)}";
-            cst = connectStudent.prepareCall(sql);
+            cst = databaseConnection.prepareCall(sql);
             cst.setString(1, StudentId);
             cst.setString(2, st.getName());
             cst.setInt(3, st.getAge());
@@ -106,6 +97,7 @@ public class StudentDaoImpl implements IStudent {
             int number = cst.executeUpdate();
             closeConnect();
             closeCallable();
+          
         } catch (SQLException ex) {
             Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -113,26 +105,31 @@ public class StudentDaoImpl implements IStudent {
 
     @Override
     public Student getStudentById(String studentID) {
-        Student st = null;
-        if (connectStudent == null) {
-            setConnectionStudent();
-        }
         try {
-            cst = connectStudent.prepareCall("{call sp_get_student_by_id(?)}");
-            cst.setString(1, studentID);
-            rs = cst.executeQuery();
-            if (rs.next()) {
-                st = new Student(rs.getString(1), rs.getString(2),
-                        rs.getInt(3), rs.getInt(4),
-                        rs.getString(5), rs.getString(6), rs.getFloat(7), rs.getInt(8));
-                return st;
+            Student st = null;
+
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+
+            try {
+                cst = databaseConnection.prepareCall("{call sp_get_student_by_id(?)}");
+                cst.setString(1, studentID);
+                rs = cst.executeQuery();
+                if (rs.next()) {
+                    st = new Student(rs.getString(1), rs.getString(2),
+                            rs.getInt(3), rs.getInt(4),
+                            rs.getString(5), rs.getString(6), rs.getFloat(7), rs.getInt(8));
+                    return st;
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                closeCallable();
+                closeConnect();
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closeCallable();
-            closeConnect();
         }
         return null;
     }
@@ -141,12 +138,11 @@ public class StudentDaoImpl implements IStudent {
     public void edit(Student st) {
         try {
             System.out.println("cap nhat sv");
-            if (connectStudent == null) {
-                setConnectionStudent();
-            }
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+
             // Gọi thủ tục cập nhật sinh viên 
             String sql = "{call sp_editST(?,?,?,?,?,?,?,?)}";
-            cst = connectStudent.prepareCall(sql);
+            cst = databaseConnection.prepareCall(sql);
             cst.setString(1, st.getId());
             cst.setString(2, st.getName());
             cst.setInt(3, st.getAge());
@@ -172,12 +168,11 @@ public class StudentDaoImpl implements IStudent {
     @Override
     public void delete(Student student) {
         try {
-            if (connectStudent == null) {
-                setConnectionStudent();
-            }
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+
             // Gọi thủ tục cập nhật sinh viên 
             String sql = "{call sp_deleteSt(?,?)}";
-            cst = connectStudent.prepareCall(sql);
+            cst = databaseConnection.prepareCall(sql);
             cst.setString(1, student.getId());
             cst.setInt(2, (student.getStatus()) == 1 ? 0 : 1);
             int number = cst.executeUpdate();
@@ -210,37 +205,34 @@ public class StudentDaoImpl implements IStudent {
 
     public void closeConnect() {
         try {
-            if (connectStudent != null) {
-                connectStudent.close();
+            databaseConnection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        databaseConnection = null;
+    }
 
+    public void closeCallable() {
+        try {
+            if (cst != null) {
+                cst.close();
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        connectStudent = null;
-    }
 
-    public void closeCallable() {
-        if (cst != null) {
-            try {
-                cst.close();
-
-            } catch (SQLException ex) {
-                Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         cst = null;
     }
 
     public void closeResultSet() {
-        if (rs != null) {
-            try {
+        try {
+            if (rs != null) {
                 rs.close();
-
-            } catch (SQLException ex) {
-                Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         rs = null;
     }
 

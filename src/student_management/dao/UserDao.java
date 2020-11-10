@@ -7,13 +7,19 @@ package student_management.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.sql.Types;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import student_management.entities.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -21,20 +27,12 @@ import student_management.entities.User;
  */
 public class UserDao implements IUser {
 
-    private static Connection conn = null;
+    private Connection databaseConnection;
     private static CallableStatement cst = null;
     private static User user;
     ResultSet rs;
 
     public UserDao() {
-    }
-
-    public Connection setConnectionJdbc() {
-        if (conn == null) {
-            // Kết nối tới Database qlsv_swing         
-            conn = new ConnectJdbc().getConnetion();
-        }
-        return conn;
     }
 
     public boolean checkUser(User user) {
@@ -47,34 +45,46 @@ public class UserDao implements IUser {
     }
 
     @Override
-    public User getUser(String name, String password) {
+    public User getNewUserRegister(String name, String pass, String email) {
+
+        Date date = Date.valueOf(LocalDate.now());
+        int status = 0;
+        int roleId = 1;
+        Random rand = new Random();
+        int min = 100000, max = 999999;
+        int verifyCode = rand.nextInt(max - min) + min;
+        return user = new User(name, BCrypt.hashpw(pass, BCrypt.gensalt(12)), email, roleId, verifyCode, status, date);
+    }
+
+    @Override
+    public User getUserToLogin(String name, String password) {
         return null;
     }
 
     @Override
     public User getUserByEmail(String email) {
-        if (conn == null) {
-            conn = setConnectionJdbc();
-        }
-        try (CallableStatement cst = conn.prepareCall("{call sp_get_user_byemail(?) }")) {
-            cst.setString(1, email);
-            ResultSet rs = cst.executeQuery();
-            if (rs.next()) {
-                user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"));
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+            try (CallableStatement cst = databaseConnection.prepareCall("{call sp_get_user_byemail(?) }")) {
+                cst.setString(1, email);
+                ResultSet rs = cst.executeQuery();
+                if (rs.next()) {
+                    user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
 
-                return user;
-            } else {
-                return null;
+                    return user;
+                } else {
+                    return null;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                closeDatabaseConnection();
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            close();
         }
-
         return null;
-
     }
 
     @Override
@@ -85,46 +95,75 @@ public class UserDao implements IUser {
 
     @Override
     public User addVerifyCodeByEmail(String email, Integer code) {
-        if (conn == null) {
-            conn = setConnectionJdbc();
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+            User user = new User();
+            try (CallableStatement cst = databaseConnection.prepareCall("{call sp_add_verifycode_password(?,?,?)}");) {
+                cst.setString(1, email);
+                cst.setInt(2, code);
+                cst.registerOutParameter(3, Types.INTEGER);
+                cst.executeUpdate();
+                if (cst.getInt(3) == 0) {
+                    user = getUserByEmail(email);
+                    return user;
+                } else {
+                    return null;
+                }
 
-        }
-        User user = null;
-        try (CallableStatement cst = conn.prepareCall("{call sp_add_verifycode_password(?,?,?)}");) {
-
-            cst.setString(1, email);
-            cst.setInt(2, code);
-            cst.registerOutParameter(3, Types.INTEGER);
-            cst.executeUpdate();
-            if (cst.getInt(3) == 0) {
-                user = getUserByEmail(email);
-                return user;
-            } else {
-                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                closeDatabaseConnection();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
 
     @Override
-    public void close() {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public void closeDatabaseConnection() {
+        try {
+
+            databaseConnection.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        conn = null;
+
     }
 
     @Override
     public void insert(User user) {
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+
+            try (CallableStatement cst = databaseConnection.prepareCall("{call sp_insert_user(?,?,?,?,?,?,?,?) }");) {
+                cst.setString(1, user.getUserName());
+                cst.setString(2, user.getPassword());
+                cst.setString(3, user.getEmail());
+                cst.setInt(4, user.getRoleId());
+                cst.setInt(5, user.getVerifyCode());
+                cst.setInt(6, user.getStatus());
+                cst.setDate(7, user.getDateRelase());
+                cst.registerOutParameter(8, java.sql.Types.INTEGER);
+                cst.executeUpdate();
+                if (cst.getInt(8) == 0) {
+                    System.out.println("them moi thanh cong dong 155 user dao");
+                } else {
+                    System.out.println("them moi that bai dong 155 user dao");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                closeDatabaseConnection();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -136,31 +175,84 @@ public class UserDao implements IUser {
     }
 
     @Override
-    public boolean updatePassword(User user, String password) {
-        if (conn == null) {
-            conn = setConnectionJdbc();
+    public boolean updatePasswordByEmail(User user, String password) {
 
-        }
-        try (CallableStatement cst = conn.prepareCall("{call sp_change_password_by_email(?,?)}");) {
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
 
-            cst.setString(1, user.getEmail());
-            cst.setString(2, password);
-            int check = cst.executeUpdate();
-            if (check>0) {       
-                return true;
-            }       
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close();
+            try (CallableStatement cst = databaseConnection.prepareCall("{call sp_change_password_by_email(?,?)}");) {
+                cst.setString(1, user.getEmail());
+                cst.setString(2, BCrypt.hashpw(password, BCrypt.gensalt(12)));
+                int check = cst.executeUpdate();
+                if (check > 0) {
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                closeDatabaseConnection();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
         return false;
     }
 
     @Override
     public List<User> getAllUser() {
         return null;
+    }
+
+    @Override
+    public boolean checkUserNameExists(String username) {
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+            try (CallableStatement cst = databaseConnection.prepareCall("{call sp_check_username_not_exists(?,?)}");) {
+                cst.setString(1, username);
+                cst.registerOutParameter(2, java.sql.Types.INTEGER);
+
+                cst.executeUpdate();
+                int error = cst.getInt(2);
+                if (error == 0) {
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                closeDatabaseConnection();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkUserEmailExists(String email) {
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+            try (CallableStatement cst = databaseConnection.prepareCall("{call sp_check_useremail_not_exists(?,?)}");) {
+                cst.setString(1, email);
+                cst.registerOutParameter(2, java.sql.Types.INTEGER);
+                cst.executeUpdate();
+                int error = cst.getInt(2);
+                if (error == 0) {
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                closeDatabaseConnection();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    @Override
+    public void confirmUser(User user) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

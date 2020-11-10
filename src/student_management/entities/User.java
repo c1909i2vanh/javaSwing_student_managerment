@@ -3,22 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package  student_management.entities;
+package student_management.entities;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
  * @author GIANG
  */
 public class User {
+
     private String userName;
     private String password;
     private String email;
     private int roleId;
     private int verifyCode;
-    private int status ;
+    private int status;
     private Date dateRelase;
+
     public User() {
     }
 
@@ -37,26 +39,8 @@ public class User {
         this.dateRelase = dateRelase;
     }
 
-    public User(String userName, String password, String email, int roleId, int verifyCode, int status) {
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.roleId = roleId;
-        this.verifyCode = verifyCode;
-        this.status = status;
-    }
+   
 
-  
-
-    public User(String userName, String password, String email) {
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.roleId = 1;
-        this.status =1;
-    }
-
-    
     public String getUserName() {
         return userName;
     }
@@ -105,10 +89,17 @@ public class User {
         this.status = status;
     }
 
+    public Date getDateRelase() {
+        return dateRelase;
+    }
+
+    public void setDateRelase(Date dateRelase) {
+        this.dateRelase = dateRelase;
+    }
+
     @Override
     public String toString() {
         return "User{" + "userName=" + userName + ", password=" + password + ", email=" + email + ", roleId=" + roleId + ", verifyCode=" + verifyCode + ", status=" + status + '}';
     }
-    
-    
+
 }

@@ -14,21 +14,30 @@ import student_management.entities.User;
  */
 public interface IUser {
 
+    public User getNewUserRegister(String name, String pass, String email);
+
     public void insert(User user);
 
     public void update(User user);
 
     public void delete(User user);
+    public void confirmUser(User user);
+    public boolean updatePasswordByEmail(User user, String password);
 
-    public boolean updatePassword(User user, String password);
     public List<User> getAllUser();
 
-    public User getUser(String name, String pasword);
+    public User getUserToLogin(String name, String pasword);
 
     public User getUserByEmail(String email);
 
     public User getUserByName(String name);
 
     public User addVerifyCodeByEmail(String email, Integer code);
-    public void close();
+
+    public void closeDatabaseConnection();
+
+    public boolean checkUserNameExists(String username);
+
+    public boolean checkUserEmailExists(String email);
+
 }

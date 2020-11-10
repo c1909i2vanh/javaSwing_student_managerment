@@ -205,8 +205,8 @@ public class LoginController implements ILogin {
         @Override
         public void actionPerformed(ActionEvent e) {
             Component  loginComponent = loginView.getLoginComponent();
-            forgotPassView = new ForgotPassView();
-            ForgotPassController forgotController = new ForgotPassController(forgotPassView);
+           
+            ForgotPassController forgotController = new ForgotPassController();
             forgotController.showForgotPassView(loginComponent);
             loginView.closeLogin();
         }

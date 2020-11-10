@@ -8,12 +8,6 @@ package student_management.controller;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.util.Properties;
 import java.util.Random;
 import javax.mail.Message;
@@ -48,18 +42,15 @@ public class ForgotPassController implements ILogin {
 
     private static User user;
 
-    public ForgotPassController(ForgotPassView forgotView) {
-        this.forgotPassView = forgotView;
+    public ForgotPassController() {
+        this.forgotPassView =  new ForgotPassView();
         this.userDao = new UserDao();
-        forgotView.addExitMouseListener(new ExitMouseForgotListener());
-        forgotView.addBackToForgotListener(new BackToForgotViewListener());
-        forgotView.addSendVerifyCodeListener(new SendVerifyCodeListener());
-        forgotView.addNextToStepListener(new NextToStepListener());
-        forgotView.addVerifyCodeListener(new VerifyCodeListener());
-        forgotView.addFinishListener(new FinishForgotPassListener());
+        forgotPassView.addExitMouseListener(new ExitMouseForgotListener());
+        forgotPassView.addBackToForgotListener(new BackToForgotViewListener());
+        forgotPassView.addSendVerifyCodeListener(new SendVerifyCodeListener());
+        forgotPassView.addNextToStepListener(new NextToStepListener());
+        forgotPassView.addFinishListener(new FinishForgotPassListener());
     }
-
-   
 
     @Override
     public void showLoginView() {
@@ -82,9 +73,7 @@ public class ForgotPassController implements ILogin {
         public void actionPerformed(ActionEvent e) {
             //Check email adress
             String toEMail = forgotPassView.getEmailField();
-
             if (forgotPassView.regexEmail(toEMail)) {
-
                 // Call procedure to add verifyCode to server
                 int errorNumber = 1;
                 Random rand = new Random();
@@ -93,9 +82,7 @@ public class ForgotPassController implements ILogin {
                 String host = "smtp.gmail.com";
                 String fromEmail = "studentmanagement89@gmail.com";
                 String fromPassword = "Giang123";
-
                 String subject = "Verify Code";
-
                 // Get user by email and add verifyCode
                 user = userDao.addVerifyCodeByEmail(toEMail, randomCode);
                 if (user != null) {
@@ -128,39 +115,17 @@ public class ForgotPassController implements ILogin {
                     forgotPassView.enableNextBtn();
                     forgotPassView.showNotify("Code has been send to your email! Please check your email!");
                     forgotPassView.showNotify1("Enter you verify code");
-
                 } else {
 
-                    forgotPassView.showErrorForgot("We found an account associated with your email! Please try again! ");
+                    forgotPassView.showError("We found an account associated with your email! Please try again! ");
                 }
             } else {
-
-                forgotPassView.showErrorForgot("The email address  you entered is invalid. Please try again");
-
+                forgotPassView.showError("The email address  you entered is invalid. Please try again");
             }
-
         }
-
     }
 
-    private static class VerifyCodeListener implements ActionListener {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-//            String code = forgotPassView.getVerifyCodeField();
-//            if (forgotPassView.regexVerifyCode(code)) {
-//                if (forgotPassView.checkVerifyCode(user)) {
-//                   forgotPassView
-//                } else {
-//                    forgotPassView.showError("The provided verification code is invalid. Please verify the entered code and try again");
-//                }
-//            } else {
-//                forgotPassView.showError("The provided verification code is invalid. Please verify the entered code and try again");
-//            }
-
-        }
-
-    }
 
     private static class ExitMouseForgotListener implements ActionListener {
 
@@ -171,10 +136,7 @@ public class ForgotPassController implements ILogin {
             controller.showLoginView();
             forgotPassView.close();
         }
-
     }
-
-  
 
     private static class BackToLoginListener implements ActionListener {
 
@@ -190,14 +152,15 @@ public class ForgotPassController implements ILogin {
         public void actionPerformed(ActionEvent e) {
             String code = forgotPassView.getVerifyCodeField();
             if (forgotPassView.regexVerifyCode(code)) {
+                //Check user retrieve by SendVerifyCodeListener Class
                 if (forgotPassView.checkVerifyCode(user)) {
                     forgotPassView.showResetView();
                     forgotPassView.hideForgotView();
                 } else {
-                    forgotPassView.showErrorForgot("The provided verification code is invalid. Please verify the entered code and try again");
+                    forgotPassView.showError("The provided verification code is invalid. Please verify the entered code and try again");
                 }
             } else {
-                forgotPassView.showErrorForgot("The provided verification code is invalid. Please verify the entered code and try again");
+                forgotPassView.showError("The provided verification code is invalid. Please verify the entered code and try again");
             }
         }
     }
@@ -210,11 +173,13 @@ public class ForgotPassController implements ILogin {
             String passwordConfirm = forgotPassView.getConfirmPassField();
             if (forgotPassView.regexNewPassword(newPassword)) {
                 forgotPassView.showErrorPassword("");
-                System.out.println(newPassword);
-                System.out.println(passwordConfirm);
-                if (newPassword.equals(passwordConfirm)){
-                    if (userDao.updatePassword(user, newPassword)) {
+                if (newPassword.equals(passwordConfirm)) {
+                    if (userDao.updatePasswordByEmail(user, newPassword)) {
                         JOptionPane.showMessageDialog(loginView, "Your password has been changed!");
+                        loginView = new LoginView();
+                        LoginController controller = new LoginController(loginView);
+                        controller.showLoginView();
+                        forgotPassView.close();
                     }
                 } else {
                     forgotPassView.showErrorConfirmPass("Your confirm password doesn't match new password!Please try again");

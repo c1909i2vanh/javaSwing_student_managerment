@@ -20,7 +20,7 @@ CREATE TABLE tbluser(
 	roleId int ,
 	verifyCode int default null,
 	status  int default 1,
-	daterelase date
+	daterelease date
 	CONSTRAINT FK_tblroldid FOREIGN KEY(roleId) REFERENCES tblrole(id)
 )
 GO
@@ -31,6 +31,7 @@ CREATE TABLE tblclass(
 	CONSTRAINT IX_tblclass_classname_unique UNIQUE(classname)
 )
 GO
+
 --CREATE tblgpa
 	/*CREATE TABLE tblmark(
 		id int identity(1,1) PRIMARY KEY,
@@ -98,65 +99,89 @@ AS
 			END
 	END
 GO
---TEST PROC
-declare @a varchar(50),@veri int
-EXEC sp_change_password_by_email 'truonggiang2298@gmail.com',1233333
-select * from tbluser
+/*
+	Procedure check tbl user username exists
+*/
+CREATE PROCEDURE sp_check_username_not_exists(
+@username varchar(20),
+@err int output
+)
+AS
+	BEGIN
+		IF NOT EXISTS(SELECT 1 FROM tbluser where username LIKE @username)
+			BEGIN
+				SET @err = 0;
+			END
+		ELSE
+			BEGIN
+				SET @err =1;
+			END
+	END
+GO
+/*
+	Procedure check tbluser email exists
+*/
+CREATE PROCEDURE sp_check_useremail_not_exists(
+@email varchar(50),
+@err int output
+)
+AS
+	BEGIN
+		IF NOT EXISTS(SELECT 1 FROM tbluser where email LIKE @email)
+			BEGIN
+				SET @err = 0;
+			END
+		ELSE
+			BEGIN
+				SET @err =1;
+			END
+	END
+GO
 
+select * from tbluser
+declare  @err int 
+exec sp_check_username_not_exists 'admin9',@err output
+SELECT @err
 --****************
-ALTER PROCEDURE sp_addnewuser(
+CREATE PROCEDURE sp_insert_user(
 	@username varchar(20),
 	@password nvarchar(200),
 	@email varchar(50),
-	@mes nvarchar(100) OUTPUT
+	@roleId int,
+	@verifyCode int,
+	@status int,
+	@daterelease date,
+	@err int output
+
+	
 )
 AS
 	BEGIN 				
-		IF NOT EXISTS(select   username,   email FROM tbluser where username LIKE @username OR email LIKE @email )
-			
+		IF NOT EXISTS(select   username,   email FROM tbluser where username LIKE @username OR email LIKE @email )		
 			BEGIN 		
-				INSERT INTO tbluser(username,password,email) VALUES(@username,@password,@email)
-				IF @@ROWCOUNT =1
-					BEGIN 							
-						SET @mes = 'Đăng ký thành công';
+				INSERT INTO tbluser VALUES(@username,@password,@email,@roleId,@verifyCode,@status,@daterelease)
+				IF @@ROWCOUNT >0
+					BEGIN
+						SET @err =0;
 					END
 				ELSE
-					BEGIN						
-						SET @mes = 'Đăng ký thất bại!Xin kiểm tra lại';
-					END
+					BEGIN
+					SET @err =1;
+					END							
 			END
 		ELSE					
 			BEGIN				
-					SET @mes = 'Đăng ký thất bại!Xin kiểm tra lại';					
+					SET @err =1;			
 			END
 	END
 GO
 
 -- them tai khoan dau tien
 INSERT INTO tbluser(username,password,email) VALUES('admin9','123456','a@')
-/*test thủ tục thêm tài khoản
-declare @username varchar(20),@pass nvarchar(200),@mail varchar(50),@mes nvarchar(100)
-EXEC sp_addnewuser 'admin8','123456','a@',@mes OUTPUT
-select @mes
-*/
--- Thủ tục check tên đăng nhập
-CREATE PROC sp_check_username_exists(
-@username varchar(50),
-@messeage nvarchar(50) OUTPUT
-)
-AS
-BEGIN
-	IF  EXISTS( SELECT 1 FROM tbluser where username = @username)
-		BEGIN
-			SET @messeage = 'Username đã tồn tại! ';
-		END
-	ELSE
-		BEGIN
-			SET @messeage = '';
-			
-		END
-END
-GO
+declare @err int 
+EXEC sp_insert_user 'admin','123','abc@gmail.com',1,1,0,'4/1/2000',@err output
+select @err
+select * from tbluser
 /*
 select *from tbluser
 declare @user varchar(50),@mes nvarchar(50)
@@ -164,23 +189,7 @@ EXEC sp_check_username_exists 'admin9',@mes OUTPUT
 SELECT @mes
 */
 GO
-CREATE PROC sp_check_email_exists(
-@email varchar(50),
-@messenger nvarchar(50) OUTPUT
-)
-AS
-BEGIN
-	IF  EXISTS( SELECT 1 FROM tbluser where email LIKE @email and status =1)
-		BEGIN
-			SET @messenger = 'Email đã tồn tại! ';
-		END
-	ELSE
-		BEGIN
-			SET @messenger = '';
-			
-		END
-END
-GO
+
 
 --Tạo thủ tục lấy user by email
 CREATE PROCEDURE sp_get_user_byemail(
