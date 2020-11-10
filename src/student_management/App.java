@@ -33,8 +33,8 @@ public class App {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                LoginView view = new LoginView();
-                ILogin controller = new LoginController(view);                     
+               
+                ILogin controller = new LoginController();                     
                 controller.showLoginView();                
             }
 

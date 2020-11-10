@@ -32,16 +32,16 @@ public class LoginController implements ILogin {
     private static RegisterView registerView;
     private static ForgotPassView forgotPassView;
 
-    public LoginController(LoginView view) {
-        this.loginView = view;
+    public LoginController() {
+        this.loginView = new LoginView();
         this.userDao = new UserDao();
-        view.addLoginListener(new LoginListener());
-        view.addEnterKeyLoginListener(new EnterKeyPressedListener());
-        view.addEnterKeyTypedListener(new EnterKeyPressedListener());
-        view.addUserFieldKeyTypedListener(new UserTextFieldKeyPressedListener());
-        view.addPasswordFieldKeyTypedListener(new PasswordTextFieldKeyPressedListener());
-        view.addRegisterListener(new ShowHideRegisterViewListener());
-        view.addForgotPassListener(new ForgotPasswordViewListener() );
+        loginView.addLoginListener(new LoginListener());
+        loginView.addEnterKeyLoginListener(new EnterKeyPressedListener());
+        loginView.addEnterKeyTypedListener(new EnterKeyPressedListener());
+        loginView.addUserFieldKeyTypedListener(new UserTextFieldKeyPressedListener());
+        loginView.addPasswordFieldKeyTypedListener(new PasswordTextFieldKeyPressedListener());
+        loginView.addRegisterListener(new ShowHideRegisterViewListener());
+        loginView.addForgotPassListener(new ForgotPasswordViewListener() );
     }
 
   
@@ -49,15 +49,7 @@ public class LoginController implements ILogin {
     public void showLoginView() {
         loginView.startLogin();
     }
-
-    public void showRegisterView() {
-        registerView.startLogin();
-    }
-
-    public void showForgotPassView() {
-
-    }
-
+   
     public static Boolean getStatus() {
         return status;
     }
@@ -75,7 +67,7 @@ public class LoginController implements ILogin {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            User user = loginView.getUser();
+            User user = loginView.getLoginUser();
             if (userDao.checkUser(user)) {
                 //neu dang nhap thanh cong mo man hinh quan ly sinh vien
                 studentView = new StudentView();
@@ -167,7 +159,7 @@ public class LoginController implements ILogin {
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                User user = loginView.getUser();
+                User user = loginView.getLoginUser();
                 if (userDao.checkUser(user)) {
                     //neu dang nhap thanh cong mo man hinh quan ly sinh vien
                     studentView = new StudentView();
@@ -195,7 +187,10 @@ public class LoginController implements ILogin {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            new RegisterView().setVisible(true);
+             Component  loginComponent = loginView.getLoginComponent();
+            RegisterController registerController = new RegisterController();
+            registerController.showRegisterView(loginComponent);
+             loginView.closeLogin();
 
         }
     }

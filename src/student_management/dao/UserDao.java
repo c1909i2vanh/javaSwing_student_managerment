@@ -37,8 +37,26 @@ public class UserDao implements IUser {
 
     public boolean checkUser(User user) {
         if (user != null) {
-            if (user.getUserName().equals("1") && user.getPassword().equals("1")) {
-                return true;
+            try {
+                String password = user.getPassword();
+                databaseConnection = DatabaseConnection.getInstance().getConnetion();
+                try (CallableStatement cst = databaseConnection.prepareCall("{call sp_get_user_by_name(?) }")) {
+                    cst.setString(1, user.getUserName());
+                    ResultSet rs = cst.executeQuery();
+                    if (rs.next()) {
+                        user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
+                        if (BCrypt.checkpw(password, user.getPassword())) {
+                            return true;
+                        }
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    closeDatabaseConnection();
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
@@ -46,14 +64,13 @@ public class UserDao implements IUser {
 
     @Override
     public User getNewUserRegister(String name, String pass, String email) {
-
         Date date = Date.valueOf(LocalDate.now());
         int status = 0;
         int roleId = 1;
         Random rand = new Random();
         int min = 100000, max = 999999;
         int verifyCode = rand.nextInt(max - min) + min;
-        return user = new User(name, BCrypt.hashpw(pass, BCrypt.gensalt(12)), email, roleId, verifyCode, status, date);
+        return user = new User(name,pass, email, roleId, verifyCode, status, date);
     }
 
     @Override
@@ -141,7 +158,7 @@ public class UserDao implements IUser {
 
             try (CallableStatement cst = databaseConnection.prepareCall("{call sp_insert_user(?,?,?,?,?,?,?,?) }");) {
                 cst.setString(1, user.getUserName());
-                cst.setString(2, user.getPassword());
+                cst.setString(2, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
                 cst.setString(3, user.getEmail());
                 cst.setInt(4, user.getRoleId());
                 cst.setInt(5, user.getVerifyCode());
@@ -149,11 +166,6 @@ public class UserDao implements IUser {
                 cst.setDate(7, user.getDateRelase());
                 cst.registerOutParameter(8, java.sql.Types.INTEGER);
                 cst.executeUpdate();
-                if (cst.getInt(8) == 0) {
-                    System.out.println("them moi thanh cong dong 155 user dao");
-                } else {
-                    System.out.println("them moi that bai dong 155 user dao");
-                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -204,16 +216,16 @@ public class UserDao implements IUser {
     }
 
     @Override
-    public boolean checkUserNameExists(String username) {
+    public boolean checkUserNameNotExists(String username) {
         try {
             databaseConnection = DatabaseConnection.getInstance().getConnetion();
             try (CallableStatement cst = databaseConnection.prepareCall("{call sp_check_username_not_exists(?,?)}");) {
                 cst.setString(1, username);
-                cst.registerOutParameter(2, java.sql.Types.INTEGER);
+                cst.registerOutParameter(2, Types.INTEGER);
 
                 cst.executeUpdate();
-                int error = cst.getInt(2);
-                if (error == 0) {
+
+                if (cst.getInt(2) == 0) {
                     return true;
                 }
             } catch (Exception e) {
@@ -228,7 +240,7 @@ public class UserDao implements IUser {
     }
 
     @Override
-    public boolean checkUserEmailExists(String email) {
+    public boolean checkUserEmailNotExists(String email) {
         try {
             databaseConnection = DatabaseConnection.getInstance().getConnetion();
             try (CallableStatement cst = databaseConnection.prepareCall("{call sp_check_useremail_not_exists(?,?)}");) {
@@ -251,8 +263,26 @@ public class UserDao implements IUser {
     }
 
     @Override
-    public void confirmUser(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean confirmUser(User user, String code) {
+        if (user.getVerifyCode() == Integer.parseInt(code)) {
+            try {
+                databaseConnection = DatabaseConnection.getInstance().getConnetion();
+                String sql = "{call sp_confirmuser(?,?)}";
+                CallableStatement cst = databaseConnection.prepareCall(sql);
+                cst.setString(1, user.getEmail());
+                cst.registerOutParameter(2, java.sql.Types.INTEGER);
+                int err = cst.executeUpdate();
+
+                if (cst.getInt(2) == 0) {
+                    return true;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        return false;
+
     }
 
 }

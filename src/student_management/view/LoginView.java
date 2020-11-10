@@ -741,7 +741,7 @@ public class LoginView extends javax.swing.JFrame {
         }
     }
 
-    public User getUser() {
+    public User getLoginUser() {
         // if the check box is clicked and the boolean rememberPreference is false
         if (!rememberPreference && rememberMeCBox.isSelected()) {
             //Insert into the preference the name

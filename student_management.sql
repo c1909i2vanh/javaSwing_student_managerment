@@ -60,7 +60,7 @@ GO
 	return output 0 error
 	Else return 1 error
 */
-ALTER PROCEDURE sp_add_verifycode_password(
+CREATE PROCEDURE sp_add_verifycode_password(
 	@email varchar(50),
 	@verifycode int,
 	@err int output
@@ -200,8 +200,69 @@ AS
 	select TOP 1 *FROM tbluser where email = @email 
 	END
 GO
+/*
+	Procedure confirm user
+*/
+
+CREATE PROCEDURE sp_confirmuser(
+@email varchar(50),
+@err int output
+)
+AS
+	BEGIN
+		IF  EXISTS(SELECT 1 FROM tbluser where email LIKE @email)
+			BEGIN
+				UPDATE tbluser SET status = 1 where email LIKE @email
+				SET @err = 0;
+			END
+		ELSE
+			BEGIN
+				SET @err =1;
+			END
+	END
+GO
+declare @email varchar(50),@err int
+EXEC sp_confirmuser 'truonggiang2298@gmail.com',@err output
+SELECT @err
+
 SELECT * FROM tbluser
 SELECT count(id) From tblstudent
+GO
+/*
+	Procedure checkUserLogin
+	Return no error if username or email match @name
+	and password match @password
+*/
+CREATE PROCEDURE sp_check_user_login(
+@name varchar(50),
+@password varchar(200),
+@err int output
+)
+AS
+	BEGIN
+		IF  EXISTS(SELECT 1 FROM tbluser WHERE password LIKE @password AND (  username LIKE @name OR email LIKE @name))
+			BEGIN
+				SET @err = 0;
+			END
+		ELSE
+			BEGIN
+				SET @err =1;
+			END
+	END
+GO
+select* from tbluser
+ALTER PROCEDURE sp_get_user_by_name(
+@name varchar(50)
+
+)
+AS
+	BEGIN
+		IF  EXISTS(SELECT 1 FROM tbluser WHERE  username LIKE @name OR email LIKE @name)
+			BEGIN
+				SELECT * FROM tbluser where username LIKE @name OR email LIKE @name		
+			END	
+			
+	END
 GO
 -- thủ tục đếm số sinh viên
 CREATE PROC sp_get_count_student

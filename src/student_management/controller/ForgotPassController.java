@@ -5,6 +5,7 @@
  */
 package student_management.controller;
 
+import customClass.SendMail;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,7 +44,7 @@ public class ForgotPassController implements ILogin {
     private static User user;
 
     public ForgotPassController() {
-        this.forgotPassView =  new ForgotPassView();
+        this.forgotPassView = new ForgotPassView();
         this.userDao = new UserDao();
         forgotPassView.addExitMouseListener(new ExitMouseForgotListener());
         forgotPassView.addBackToForgotListener(new BackToForgotViewListener());
@@ -72,44 +73,20 @@ public class ForgotPassController implements ILogin {
         @Override
         public void actionPerformed(ActionEvent e) {
             //Check email adress
-            String toEMail = forgotPassView.getEmailField();
-            if (forgotPassView.regexEmail(toEMail)) {
-                // Call procedure to add verifyCode to server
-                int errorNumber = 1;
+            String toEmail = forgotPassView.getEmailField();
+            if (forgotPassView.regexEmail(toEmail)) {
+                // Call procedure to add verifyCode to server          
                 Random rand = new Random();
                 int min = 100000, max = 999999;
                 int randomCode = rand.nextInt(max - min) + min;
-                String host = "smtp.gmail.com";
-                String fromEmail = "studentmanagement89@gmail.com";
-                String fromPassword = "Giang123";
-                String subject = "Verify Code";
-                // Get user by email and add verifyCode
-                user = userDao.addVerifyCodeByEmail(toEMail, randomCode);
-                if (user != null) {
-                    Properties pros = new Properties();
-                    pros.put("mail.smtp.auth", "true");
-                    pros.put("mail.smtp.starttls.enable", "true");
-                    pros.put("mail.smtp.host", "smtp.gmail.com");
-                    pros.put("mail.smtp.port", "587");
-                    Session mailSession = Session.getInstance(pros,
-                            new javax.mail.Authenticator() {
-                                @Override
-                                protected PasswordAuthentication getPasswordAuthentication() {
-                                    return new PasswordAuthentication(fromEmail, fromPassword);
-                                }
-                            });
-                    try {
-                        Message msg = new MimeMessage(mailSession);
-                        msg.setFrom(new InternetAddress(fromEmail));
-                        msg.setRecipients(Message.RecipientType.TO,
-                                InternetAddress.parse(user.getEmail()));
-                        msg.setSubject(subject);
-                        msg.setText("Your verify code is " + user.getVerifyCode());
-                        Transport.send(msg);
 
-                    } catch (Exception ex1) {
-                        System.err.println("" + e);
-                    }
+                // Get user by email and add verifyCode
+                user = userDao.addVerifyCodeByEmail(toEmail, randomCode);
+                if (user != null) {
+                    String subject = "New Student Management Password  Verification";
+                    String message = "Your verify code is " + randomCode;
+                    SendMail sendMail = new SendMail();
+                    sendMail.sendMail(toEmail, message, subject);
                     forgotPassView.disableSendCodeBtn();
                     forgotPassView.deleteError();
                     forgotPassView.enableNextBtn();
@@ -125,14 +102,12 @@ public class ForgotPassController implements ILogin {
         }
     }
 
-
-
     private static class ExitMouseForgotListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            loginView = new LoginView();
-            LoginController controller = new LoginController(loginView);
+
+            LoginController controller = new LoginController();
             controller.showLoginView();
             forgotPassView.close();
         }
@@ -176,8 +151,8 @@ public class ForgotPassController implements ILogin {
                 if (newPassword.equals(passwordConfirm)) {
                     if (userDao.updatePasswordByEmail(user, newPassword)) {
                         JOptionPane.showMessageDialog(loginView, "Your password has been changed!");
-                        loginView = new LoginView();
-                        LoginController controller = new LoginController(loginView);
+
+                        LoginController controller = new LoginController();
                         controller.showLoginView();
                         forgotPassView.close();
                     }

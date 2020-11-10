@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFrame;
+import student_management.controller.RegisterController;
 import student_management.entities.User;
 
 /**
@@ -271,7 +272,7 @@ public class RegisterView extends javax.swing.JFrame {
                 .addComponent(registerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addComponent(ClearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58))
+                .addGap(56, 56, 56))
         );
         registerPanelLayout.setVerticalGroup(
             registerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,11 +302,11 @@ public class RegisterView extends javax.swing.JFrame {
                     .addComponent(emailLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(errorEmailField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(registerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ClearBtn)
-                    .addComponent(registerBtn))
-                .addContainerGap(21, Short.MAX_VALUE))
+                    .addComponent(registerBtn)
+                    .addComponent(ClearBtn))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         mainPanel.add(registerPanel, "card4");
@@ -399,6 +400,10 @@ public class RegisterView extends javax.swing.JFrame {
                 .addGap(159, 159, 159)
                 .addComponent(confirmVerifyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registerAuthenticationPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(verifyField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(97, 97, 97))
             .addGroup(registerAuthenticationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(registerAuthenticationPanelLayout.createSequentialGroup()
                     .addGap(26, 26, 26)
@@ -406,26 +411,25 @@ public class RegisterView extends javax.swing.JFrame {
                         .addComponent(errorVerifyCode)
                         .addGroup(registerAuthenticationPanelLayout.createSequentialGroup()
                             .addComponent(verifyLabel)
-                            .addGap(14, 14, 14)
-                            .addComponent(verifyField, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(0, 0, Short.MAX_VALUE)))
                     .addGap(26, 26, 26)))
         );
         registerAuthenticationPanelLayout.setVerticalGroup(
             registerAuthenticationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(registerAuthenticationPanelLayout.createSequentialGroup()
                 .addComponent(headerRegister1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addComponent(verifyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
                 .addComponent(confirmVerifyBtn)
                 .addGap(84, 84, 84))
             .addGroup(registerAuthenticationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(registerAuthenticationPanelLayout.createSequentialGroup()
                     .addGap(112, 112, 112)
-                    .addGroup(registerAuthenticationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(verifyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(verifyLabel))
+                    .addComponent(verifyLabel)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(errorVerifyCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(161, Short.MAX_VALUE)))
+                    .addContainerGap(163, Short.MAX_VALUE)))
         );
 
         mainPanel.add(registerAuthenticationPanel, "card4");
@@ -443,7 +447,7 @@ public class RegisterView extends javax.swing.JFrame {
             .addGroup(MainPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 81, Short.MAX_VALUE))
+                .addGap(0, 58, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -454,7 +458,9 @@ public class RegisterView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MainPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(MainPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -624,7 +630,6 @@ public class RegisterView extends javax.swing.JFrame {
 
     public void addExitMouseListener(ActionListener listener) {
         exitMouse.addActionListener(listener);
-
         exitMouse1.addActionListener(listener);
     }
 
@@ -636,8 +641,14 @@ public class RegisterView extends javax.swing.JFrame {
         ClearBtn.addActionListener(listener);
     }
 
-    public void startLogin() {
+    public void addConFirmListener(ActionListener listener) {
+        confirmVerifyBtn.addActionListener(listener);
+    }
+
+    public void startLogin(Component component) {
         this.setVisible(true);
+        this.setLocationRelativeTo(component);
+
     }
 
     public Component setViewPosition(Component component) {
@@ -749,7 +760,7 @@ public class RegisterView extends javax.swing.JFrame {
     }
 
     public boolean validateVerifyCode(String code) {
-        String regexCode = "^[\\d]{6}$";
+        String regexCode = "^[0-9]{6}$";
         Pattern p = Pattern.compile(regexCode);
         Matcher matcher = p.matcher(code);
 
@@ -757,7 +768,7 @@ public class RegisterView extends javax.swing.JFrame {
     }
 
     public boolean validatePassword(String password) {
-        String regexPassword = "^(?=.*[A-Z])(?=.*\\d)(?=.*[a-z])[A-Za-z0-9]{8,}$";
+        String regexPassword = "^(?=.*[A-Z])(?=.*\\d)(?=.*[a-z])[A-Za-z0-9]{8,16}$";
         Pattern p = Pattern.compile(regexPassword);
         Matcher matcher = p.matcher(password);
 
@@ -765,7 +776,7 @@ public class RegisterView extends javax.swing.JFrame {
     }
 
     public boolean validateUserName(String username) {
-        String regexName = "^[a-zA-Z0-9]{8,}$";
+        String regexName = "^[a-zA-Z0-9]{8,20}$";
         Pattern p = Pattern.compile(regexName);
         Matcher matcher = p.matcher(username);
 

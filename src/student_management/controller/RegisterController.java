@@ -5,8 +5,11 @@
  */
 package student_management.controller;
 
+import customClass.SendMail;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import student_management.dao.UserDao;
 import student_management.entities.User;
 import student_management.view.ForgotPassView;
@@ -26,12 +29,20 @@ public class RegisterController {
     private static Boolean status;
     private static RegisterView registerView;
     private static ForgotPassView forgotPassView;
+    private static User user;
 
     public RegisterController() {
         this.registerView = new RegisterView();
-        registerView.startLogin();
+        this.userDao = new UserDao();
         registerView.addRegisterListener(new RegisterListener());
         registerView.addClearListener(new ClearListener());
+        registerView.addExitMouseListener(new ExitMouseListener());
+        registerView.addConFirmListener(new ConfirmVerifyCode());
+    }
+
+    public void showRegisterView(Component component) {
+        registerView.startLogin(component);
+
     }
 
     private class RegisterListener implements ActionListener {
@@ -44,10 +55,9 @@ public class RegisterController {
             String email = registerView.getEmailField();
             boolean nameNotExists = true;
             boolean emailNotExists = true;
-
             if (registerView.validateUserName(username)) {
                 registerView.showErrorUserName("");
-                if (!userDao.checkUserNameExists(username)) {
+                if (userDao.checkUserNameNotExists(username)) {
                     nameNotExists = true;
                     registerView.showErrorUserName("");
                 } else {
@@ -59,7 +69,7 @@ public class RegisterController {
             }
             if (registerView.validateEmail(email)) {
                 registerView.showErrorEmail("");
-                if (!userDao.checkUserEmailExists(email)) {
+                if (userDao.checkUserEmailNotExists(email)) {
                     emailNotExists = true;
                     registerView.showErrorEmail("");
                 } else {
@@ -81,9 +91,14 @@ public class RegisterController {
             }
             if (registerView.validateUserName(username) && registerView.validateEmail(email)) {
                 if (nameNotExists && emailNotExists && registerView.validatePassword(password) && confirmPass.equals(password)) {
-                    User user = userDao.getNewUserRegister(email, email, email);
+                    user = userDao.getNewUserRegister(username, password, email);
                     if (user != null) {
                         userDao.insert(user);
+                        String toEmail = user.getEmail();
+                        String subject = "New Student Management Account Email Verification";
+                        String message = "Your verify code is " + user.getVerifyCode();
+                        SendMail sendMail = new SendMail();
+                        sendMail.sendMail(toEmail, message, subject);
                         registerView.showAuthenView();
                         registerView.hideRegisterView();
                     }
@@ -108,10 +123,31 @@ public class RegisterController {
         @Override
         public void actionPerformed(ActionEvent e) {
             String code = registerView.getVerifyCodeField();
-            if(registerView.validateVerifyCode(code)){
-                
-             //   userDao.confirmUser( user);
+            if (registerView.validateVerifyCode(code)) {
+                if (userDao.confirmUser(user, code)) {
+                    JOptionPane.showMessageDialog(registerView, "Your acccount has been confirmed!");
+                    registerView.close();
+                    LoginController controller = new LoginController();
+                    controller.showLoginView();
+
+                } else {
+                    registerView.showErrorAuthentication("Your confirm code invalid!");
+                }
+
+            } else {
+                registerView.showErrorAuthentication("Your confirm code invalid!");
             }
+        }
+
+    }
+
+    private class ExitMouseListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            registerView.close();
+            LoginController controller = new LoginController();
+            controller.showLoginView();
         }
 
     }

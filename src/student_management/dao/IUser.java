@@ -21,7 +21,9 @@ public interface IUser {
     public void update(User user);
 
     public void delete(User user);
-    public void confirmUser(User user);
+
+    public boolean confirmUser(User user, String code);
+
     public boolean updatePasswordByEmail(User user, String password);
 
     public List<User> getAllUser();
@@ -36,8 +38,8 @@ public interface IUser {
 
     public void closeDatabaseConnection();
 
-    public boolean checkUserNameExists(String username);
+    public boolean checkUserNameNotExists(String username);
 
-    public boolean checkUserEmailExists(String email);
+    public boolean checkUserEmailNotExists(String email);
 
 }
