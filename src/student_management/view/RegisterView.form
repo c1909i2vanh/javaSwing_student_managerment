@@ -185,7 +185,7 @@
                               <Component id="registerBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="ClearBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="51" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>

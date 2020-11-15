@@ -43,7 +43,6 @@ public class StudentDaoImpl implements IStudent {
             cst = databaseConnection.prepareCall("{call sp_getAll}");
             rs = cst.executeQuery();
             while (rs.next()) {
-
                 Student st = new Student(rs.getString("id"),
                         rs.getString("name"), rs.getInt("age"),
                         rs.getInt("gender"), rs.getString("address"),

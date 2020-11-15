@@ -27,10 +27,7 @@ import javax.swing.SpringLayout;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import  student_management.controller.StudentController;
 
 import  student_management.entities.Student;
 
@@ -74,7 +71,7 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
     private String[] columnNames = new String[]{
         "Order", "ID", "Name", "Age", "Gender", "Address", "Phone", "GPA", "Status"};
     // định nghĩa dữ liệu mặc định của bẳng student là rỗng
-    private Object data = new Object[][]{};
+    private Object [][]data = new Object[][]{};
     private JTable studentTable;
 
     public StudentView() {
@@ -132,8 +129,9 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
         statusGroup.setSelected(statusTrue.getModel(), true);
         //Cài đặt các cột và data cho bảng student
         studentTable.setModel(new DefaultTableModel((Object[][]) data, columnNames));
-        ((DefaultTableModel) studentTable.getModel()).fireTableDataChanged();
-        jScrollPaneStudentTable.setViewportView(studentTable);
+        
+   //    ((DefaultTableModel) studentTable.getModel()).fireTableDataChanged();
+    jScrollPaneStudentTable.setViewportView(studentTable);
 
         jScrollPaneStudentTable.setPreferredSize(new Dimension(780, 300));
 
@@ -309,6 +307,7 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
         int size = studentList.size();
         Object[][] data = new Object[size][10];
         int i = 0;
+        String [] names = new String[] {"a"};
         if (!studentList.isEmpty()) {
             for (Student st : studentList) {
                 data[i][0] = startingNumber;
@@ -324,9 +323,11 @@ public class StudentView extends JFrame implements ActionListener, ListSelection
                 startingNumber++;
 
             }
-            studentTable.setModel(new DefaultTableModel(data, columnNames));
+            studentTable.setModel(new DefaultTableModel(data, names));
         }else{
               studentTable.setModel(new DefaultTableModel(data, columnNames));
+            DefaultTableModel model = (DefaultTableModel) studentTable.getModel();
+            
         }
 
     }

@@ -177,11 +177,7 @@ AS
 GO
 
 -- them tai khoan dau tien
-INSERT INTO tbluser(username,password,email) VALUES('admin9','123456','a@')
-declare @err int 
-EXEC sp_insert_user 'admin','123','abc@gmail.com',1,1,0,'4/1/2000',@err output
-select @err
-select * from tbluser
+
 /*
 select *from tbluser
 declare @user varchar(50),@mes nvarchar(50)
@@ -221,13 +217,9 @@ AS
 			END
 	END
 GO
-declare @email varchar(50),@err int
-EXEC sp_confirmuser 'truonggiang2298@gmail.com',@err output
-SELECT @err
 
-SELECT * FROM tbluser
-SELECT count(id) From tblstudent
-GO
+
+
 /*
 	Procedure checkUserLogin
 	Return no error if username or email match @name
@@ -251,19 +243,47 @@ AS
 	END
 GO
 select* from tbluser
-ALTER PROCEDURE sp_get_user_by_name(
+CREATE PROCEDURE sp_get_user_by_name(
 @name varchar(50)
+
 
 )
 AS
 	BEGIN
 		IF  EXISTS(SELECT 1 FROM tbluser WHERE  username LIKE @name OR email LIKE @name)
 			BEGIN
-				SELECT * FROM tbluser where username LIKE @name OR email LIKE @name		
+			
+				SELECT * FROM tbluser where username LIKE @name OR email LIKE @name	
 			END	
+		ELSE
+			BEGIN
+				SELECT NULL FROM tbluser 
+			END
 			
 	END
 GO
+
+-- Tạo thủ tục lấy danh sách user kết hợp rolename
+
+CREATE PROCEDURE sp_get_list_map_user_with_role
+AS
+	BEGIN
+		SELECT * from tbluser us
+		JOIN tblrole role
+		ON us.roleId = role.id
+		AND us.username NOT LIKE 'admin'
+		ORDER BY us.roleId
+	END
+GO
+
+-- Thủ tục lay list role
+ALTER PROCEDURE sp_get_list_role
+AS
+	BEGIN
+		select * from tblrole
+	END
+GO
+EXEC sp_get_list_role
 -- thủ tục đếm số sinh viên
 CREATE PROC sp_get_count_student
 @count int OUTPUT

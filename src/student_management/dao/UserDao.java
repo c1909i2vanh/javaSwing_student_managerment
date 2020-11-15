@@ -8,13 +8,15 @@ package student_management.dao;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.sql.Types;
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +37,7 @@ public class UserDao implements IUser {
     public UserDao() {
     }
 
+    @Override
     public boolean checkUser(User user) {
         if (user != null) {
             try {
@@ -43,10 +46,14 @@ public class UserDao implements IUser {
                 try (CallableStatement cst = databaseConnection.prepareCall("{call sp_get_user_by_name(?) }")) {
                     cst.setString(1, user.getUserName());
                     ResultSet rs = cst.executeQuery();
-                    if (rs.next()) {
-                        user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
-                        if (BCrypt.checkpw(password, user.getPassword())) {
-                            return true;
+                    while (rs.next()) {
+                        // If value return is not null 
+                        // Create new user
+                        if (rs.getString(1) != null) {
+                            user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
+                            if (BCrypt.checkpw(password, user.getPassword())) {
+                                return true;
+                            }
                         }
                     }
                 } catch (SQLException ex) {
@@ -54,7 +61,6 @@ public class UserDao implements IUser {
                 } finally {
                     closeDatabaseConnection();
                 }
-
             } catch (SQLException ex) {
                 Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -70,7 +76,7 @@ public class UserDao implements IUser {
         Random rand = new Random();
         int min = 100000, max = 999999;
         int verifyCode = rand.nextInt(max - min) + min;
-        return user = new User(name,pass, email, roleId, verifyCode, status, date);
+        return user = new User(name, pass, email, roleId, verifyCode, status, date);
     }
 
     @Override
@@ -188,10 +194,8 @@ public class UserDao implements IUser {
 
     @Override
     public boolean updatePasswordByEmail(User user, String password) {
-
         try {
             databaseConnection = DatabaseConnection.getInstance().getConnetion();
-
             try (CallableStatement cst = databaseConnection.prepareCall("{call sp_change_password_by_email(?,?)}");) {
                 cst.setString(1, user.getEmail());
                 cst.setString(2, BCrypt.hashpw(password, BCrypt.gensalt(12)));
@@ -212,7 +216,43 @@ public class UserDao implements IUser {
 
     @Override
     public List<User> getAllUser() {
-        return null;
+        List<User> listUser = new ArrayList<>();
+       
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+            try (PreparedStatement ps = databaseConnection.prepareCall("select * from tbluser");) {
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
+                    listUser.add(user);
+                  
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listUser;
+    }
+
+    @Override
+    public Map<String, User> getListMapUserWithRole() {
+        List<User> listUser = new ArrayList<>();
+        Map<String, User> listMap = new HashMap<>
+        ();
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+            try ( CallableStatement cst = databaseConnection.prepareCall("{call sp_get_list_map_user_with_role}");) {
+                rs = cst.executeQuery();
+                while (rs.next()) {
+                    user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
+                    listMap.put(rs.getString("rolename"), user);
+                 
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listMap;
     }
 
     @Override
@@ -222,9 +262,7 @@ public class UserDao implements IUser {
             try (CallableStatement cst = databaseConnection.prepareCall("{call sp_check_username_not_exists(?,?)}");) {
                 cst.setString(1, username);
                 cst.registerOutParameter(2, Types.INTEGER);
-
                 cst.executeUpdate();
-
                 if (cst.getInt(2) == 0) {
                     return true;
                 }
@@ -283,6 +321,11 @@ public class UserDao implements IUser {
         }
         return false;
 
+    }
+
+    public boolean regexNewPassword(String pass) {
+        String regexCode = "^(?=.*[A-Z])(?=.*\\d)(?=.*[a-z])[A-Za-z0-9]{8,}$";
+        return pass.matches(regexCode);
     }
 
 }

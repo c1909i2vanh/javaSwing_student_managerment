@@ -75,10 +75,8 @@ public class LoginController implements ILogin {
                 studentController.showStudentView();
                 loginView.closeLogin();
             } else {
-
                 loginView.showError("Username or password is incorrect");
                 loginView.focusUserNameField();
-
             }
         }
     }

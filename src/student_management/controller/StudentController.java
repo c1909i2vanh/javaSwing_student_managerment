@@ -28,7 +28,7 @@ public class StudentController {
     private static StudentView studentView;
     private static IStudent studentDao1;
 
-    StudentController(StudentView view) {
+    public StudentController(StudentView view) {
         this.studentView = view;
         studentDao = new StudentDaoImpl();
         //add mouseClicked to JTable
@@ -57,6 +57,8 @@ public class StudentController {
         }
 
     }
+
+ 
 
     private static class AddStudentListener implements ActionListener {
 

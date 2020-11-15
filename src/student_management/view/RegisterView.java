@@ -755,7 +755,7 @@ public class RegisterView extends javax.swing.JFrame {
         String regexEmail = "^\\w+([+.-]\\w+)*@\\w+([.-]\\w+)*[.]\\w+([.-]\\w+)*$";
         Pattern p = Pattern.compile(regexEmail);
         Matcher matcher = p.matcher(email);
-
+        
         return matcher.matches();
     }
 
