@@ -58,4 +58,28 @@ public class RoleDaoImpl implements IRole {
         }
 
     }
+
+    @Override
+    public Role getRoleByRoleName(String roleName) {
+        Role role = null;
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+            try (CallableStatement cst = databaseConnection.prepareCall("{call  sp_get_role_by_name(?)}");) {
+                cst.setString(1, roleName);
+                rs = cst.executeQuery();
+                while (rs.next()) {
+                    if (rs.getString(2) != null) {
+                        role = new Role(rs.getInt(1), rs.getString(2));
+                        return role;
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeDatabaseConnection();
+        }
+        return null;
+    }
+
 }

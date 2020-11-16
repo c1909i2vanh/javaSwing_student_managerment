@@ -196,6 +196,7 @@ AS
 	select TOP 1 *FROM tbluser where email = @email 
 	END
 GO
+
 /*
 	Procedure confirm user
 */
@@ -246,14 +247,12 @@ select* from tbluser
 CREATE PROCEDURE sp_get_user_by_name(
 @name varchar(50)
 
-
 )
 AS
 	BEGIN
 		IF  EXISTS(SELECT 1 FROM tbluser WHERE  username LIKE @name OR email LIKE @name)
-			BEGIN
-			
-				SELECT * FROM tbluser where username LIKE @name OR email LIKE @name	
+			BEGIN			
+				SELECT  TOp 1 * FROM tbluser where username LIKE @name OR email LIKE @name	
 			END	
 		ELSE
 			BEGIN
@@ -263,8 +262,40 @@ AS
 	END
 GO
 
--- Tạo thủ tục lấy danh sách user kết hợp rolename
+-- taoj thu tuc get role by name
+CREATE PROCEDURE sp_get_role_by_name(
+@name varchar(50)
 
+)
+AS
+	BEGIN
+		IF  EXISTS(SELECT 1 FROM tblrole WHERE  rolename LIKE @name )
+			BEGIN			
+				SELECT  TOp 1 * FROM tblrole where rolename LIKE @name 
+			END	
+		ELSE
+			BEGIN
+				SELECT NULL FROM tblrole 
+			END
+			
+	END
+GO
+-- thu tuc updateNewRole
+CREATE PROCEDURE sp_update_new_role(
+@username varchar(50),
+@roleId int
+)
+AS
+	BEGIN
+		IF  EXISTS(select   1 FROM tbluser where username LIKE @username AND status = 1 )
+			BEGIN
+				UPDATE tbluser SET roleId = @roleId WHERE username LIKE @username
+			END
+	END
+GO
+-- Tạo thủ tục lấy danh sách user kết hợp rolename
+select* from tbluser
+select * from tblrole
 AlTER PROCEDURE sp_get_list_map_user_with_role
 
 AS
@@ -273,10 +304,10 @@ AS
 		JOIN tblrole role
 		ON us.roleId = role.id
 		AND us.username NOT LIKE  'admin'
-		ORDER BY us.roleId
+		ORDER BY us.roleId ASC
 	END
 GO
-
+exec sp_get_list_map_user_with_role
 -- Thủ tục lay list role
 ALTER PROCEDURE sp_get_list_role
 AS

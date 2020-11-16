@@ -1026,10 +1026,17 @@
                                   </Group>
                                   <EmptySpace pref="55" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="emailField" max="32767" attributes="0"/>
-                                      <Component id="roleComboBox" pref="170" max="32767" attributes="0"/>
+                                      <Component id="txtUserName" max="32767" attributes="0"/>
+                                      <Component id="comboBoxRole" pref="170" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
+                                      <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace pref="82" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1038,15 +1045,22 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="emailField" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtUserName" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="emailLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="emailLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="roleComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="comboBoxRole" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="417" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="240" max="-2" attributes="0"/>
+                                      <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace pref="241" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1060,7 +1074,10 @@
                             <Property name="text" type="java.lang.String" value="User name"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="emailField">
+                        <Component class="javax.swing.JTextField" name="txtUserName">
+                          <Properties>
+                            <Property name="editable" type="boolean" value="false"/>
+                          </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="emailLabel2">
                           <Properties>
@@ -1070,8 +1087,46 @@
                             <Property name="text" type="java.lang.String" value="Role"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JComboBox" name="roleComboBox">
+                        <Component class="javax.swing.JComboBox" name="comboBoxRole">
                         </Component>
+                        <Container class="javax.swing.JPanel" name="jPanel5">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="66" red="0" type="rgb"/>
+                            </Property>
+                          </Properties>
+
+                          <Layout>
+                            <DimensionLayout dim="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="btnSaveNewRole" alignment="1" max="32767" attributes="0"/>
+                              </Group>
+                            </DimensionLayout>
+                            <DimensionLayout dim="1">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="btnSaveNewRole" alignment="0" pref="64" max="32767" attributes="0"/>
+                              </Group>
+                            </DimensionLayout>
+                          </Layout>
+                          <SubComponents>
+                            <Component class="javax.swing.JButton" name="btnSaveNewRole">
+                              <Properties>
+                                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                                  <Image iconType="3" name="/images/save.png"/>
+                                </Property>
+                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                  <Border info="null"/>
+                                </Property>
+                                <Property name="borderPainted" type="boolean" value="false"/>
+                                <Property name="contentAreaFilled" type="boolean" value="false"/>
+                                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                                  <Color id="Hand Cursor"/>
+                                </Property>
+                                <Property name="focusPainted" type="boolean" value="false"/>
+                              </Properties>
+                            </Component>
+                          </SubComponents>
+                        </Container>
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="jPanel4">

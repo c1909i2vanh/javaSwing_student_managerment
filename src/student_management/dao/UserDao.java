@@ -20,8 +20,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import student_management.entities.User;
 import org.mindrot.jbcrypt.BCrypt;
+import student_management.entities.Role;
 
 /**
  *
@@ -93,7 +95,6 @@ public class UserDao implements IUser {
                 ResultSet rs = cst.executeQuery();
                 if (rs.next()) {
                     user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
-
                     return user;
                 } else {
                     return null;
@@ -112,8 +113,31 @@ public class UserDao implements IUser {
 
     @Override
     public User getUserByName(String name) {
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+            try (CallableStatement cst = databaseConnection.prepareCall("{call sp_get_user_by_name(?) }")) {
+                cst.setString(1,name);
+                ResultSet rs = cst.executeQuery();
+                while (rs.next()) {
+                    // If value return is not null
+                    // Create new user
+                    if (rs.getString(1) != null) {
+                        user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
+                        return user;
+                    } else {
+                        return null;
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                closeDatabaseConnection();
+            }
+            return null;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
-
     }
 
     @Override
@@ -235,24 +259,22 @@ public class UserDao implements IUser {
     }
 
     @Override
-    public List<List<User>> getListMapUserWithRole() {
-        List<User> listUser = new ArrayList<>();
-        List<List<User>> listUser1 = new ArrayList<List<User>>();
+    public Map<String, String> getListMapUserWithRole() {
+        Map<String, String> listMap = new HashMap<>();
         try {
             databaseConnection = DatabaseConnection.getInstance().getConnetion();
             try (CallableStatement cst = databaseConnection.prepareCall("{call sp_get_list_map_user_with_role}");) {
                 rs = cst.executeQuery();
                 while (rs.next()) {
-                    user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
-                   listUser.add(user);
-                   listUser1.add(listUser);
+                 
+                    listMap.put(rs.getString("username"),rs.getString("rolename"));
 
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return listUser1;
+        return listMap;
     }
 
     @Override
@@ -321,6 +343,30 @@ public class UserDao implements IUser {
         }
         return false;
 
+    }
+
+    @Override
+    public boolean updateNewRole(User user, Role role) {
+        try {
+            databaseConnection = DatabaseConnection.getInstance().getConnetion();
+            try (CallableStatement cst = databaseConnection.prepareCall("{call sp_update_new_role(?,?)}");) {
+                cst.setString(1, user.getUserName());
+                cst.setInt(2, role.getId());
+            
+                int check = cst.executeUpdate();
+                if (check > 0) {
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                closeDatabaseConnection();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
     }
 
     public boolean regexNewPassword(String pass) {

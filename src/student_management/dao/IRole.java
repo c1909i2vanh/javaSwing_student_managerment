@@ -13,6 +13,8 @@ import student_management.entities.Role;
  * @author GIANG
  */
 public interface IRole {
+
     public List<Role> getAllRole();
+    public Role getRoleByRoleName(String roleName);
     public void closeDatabaseConnection();
 }

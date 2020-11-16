@@ -7,7 +7,8 @@ package student_management.dao;
 
 import java.util.List;
 import java.util.Map;
-import javax.management.relation.Role;
+import student_management.entities.Role;
+
 import student_management.entities.User;
 
 /**
@@ -15,7 +16,9 @@ import student_management.entities.User;
  * @author GIANG
  */
 public interface IUser {
+
     public boolean checkUser(User user);
+
     public User getNewUserRegister(String name, String pass, String email);
 
     public void insert(User user);
@@ -43,6 +46,7 @@ public interface IUser {
     public boolean checkUserNameNotExists(String username);
 
     public boolean checkUserEmailNotExists(String email);
- public Map<String,User> getListMapUserWithRole();
-
+    // get list map <Key,Value>  = < username, rolename>
+    public Map<String , String> getListMapUserWithRole();
+    public boolean updateNewRole(User user ,Role role);
 }

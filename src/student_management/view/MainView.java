@@ -8,15 +8,19 @@ package student_management.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.table.*;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import student_management.entities.Role;
+import student_management.entities.Test;
 import student_management.entities.User;
 
 /**
@@ -101,9 +105,11 @@ public class MainView extends javax.swing.JFrame {
         userPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         emailLabel1 = new javax.swing.JLabel();
-        emailField = new javax.swing.JTextField();
+        txtUserName = new javax.swing.JTextField();
         emailLabel2 = new javax.swing.JLabel();
-        roleComboBox = new javax.swing.JComboBox();
+        comboBoxRole = new javax.swing.JComboBox();
+        jPanel5 = new javax.swing.JPanel();
+        btnSaveNewRole = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPaneUserTable = new javax.swing.JScrollPane();
         userTable = new javax.swing.JTable();
@@ -675,8 +681,30 @@ public class MainView extends javax.swing.JFrame {
         emailLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         emailLabel1.setText("User name");
 
+        txtUserName.setEditable(false);
+
         emailLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         emailLabel2.setText("Role");
+
+        jPanel5.setBackground(new java.awt.Color(0, 102, 255));
+
+        btnSaveNewRole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save.png"))); // NOI18N
+        btnSaveNewRole.setBorder(null);
+        btnSaveNewRole.setBorderPainted(false);
+        btnSaveNewRole.setContentAreaFilled(false);
+        btnSaveNewRole.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSaveNewRole.setFocusPainted(false);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnSaveNewRole, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnSaveNewRole, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -689,22 +717,32 @@ public class MainView extends javax.swing.JFrame {
                     .addComponent(emailLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(emailField)
-                    .addComponent(roleComboBox, 0, 170, Short.MAX_VALUE))
+                    .addComponent(txtUserName)
+                    .addComponent(comboBoxRole, 0, 170, Short.MAX_VALUE))
                 .addGap(27, 27, 27))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGap(82, 82, 82)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(82, Short.MAX_VALUE)))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(69, 69, 69)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(emailLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(emailLabel2)
-                    .addComponent(roleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboBoxRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(417, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGap(240, 240, 240)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(241, Short.MAX_VALUE)))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -966,6 +1004,7 @@ public class MainView extends javax.swing.JFrame {
     private void goToChangePassViewBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goToChangePassViewBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_goToChangePassViewBtnActionPerformed
+
     public void addAccountBtnActionListener(ActionListener listener) {
 
         userInfoBtn.addActionListener(listener);
@@ -1001,6 +1040,14 @@ public class MainView extends javax.swing.JFrame {
 
     public void addSaveNewPassBtnActionListener(ActionListener listener) {
         saveNewPassBtn.addActionListener(listener);
+    }
+
+    public void addUserTableActionListener(MouseListener listener) {
+        userTable.addMouseListener(listener);
+    }
+
+    public void addSaveNewRoleBtnActionListener(ActionListener listener) {
+        btnSaveNewRole.addActionListener(listener);
     }
 
     public void close() {
@@ -1060,23 +1107,41 @@ public class MainView extends javax.swing.JFrame {
     }
     // tra ve list array
 
-    // Tra ve list theo dang Map 
-    public void showUserView(List<List<User>> listUserWithRole) {
+    // Tra ve list theo dang Map với key là userName và value là rolename
+    public void showUserView(Map<String, String> listUserWithRole) {
         int size = listUserWithRole.size();
-      //  Object[][] data = new Object[size][3];
+        Object[][] data = new Object[size][3];
         int i = 0;
         int startingNumber = 1;
-       
-        for (List<User> listUserWithRole1 : listUserWithRole) {
-            System.out.println(listUserWithRole1);
+        LinkedHashMap<String, String> sortedMap = new LinkedHashMap<>();
+        // sorted list by Key
+        listUserWithRole.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
+        // add value to Object data
+        for (Map.Entry<String, String> entrySet : sortedMap.entrySet()) {
+            String key = entrySet.getKey();
+            String value = entrySet.getValue();
+            data[i][0] = startingNumber;
+            data[i][1] = key;
+            data[i][2] = value;
+            i++;
+            startingNumber++;
         }
-
-       // userTable.setModel(new DefaultTableModel(data, columnNames));
+        userTable.setModel(new DefaultTableModel(data, columnNames));
 //        model.fireTableDataChanged();
     }
 
     public void showListRole(List<Role> listRole) {
-      
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        Vector<Role> vector = new Vector<>();
+        listRole.stream().forEach((role) -> {
+            model.addElement(new Role(role.getId(), role.getRoleName()));
+
+            //  comboBoxRole.addItem(new Role(role.getId(),role.getRoleName()));
+        });
+        comboBoxRole.setModel(model);
     }
 
     public String getNewPassWord() {
@@ -1125,39 +1190,44 @@ public class MainView extends javax.swing.JFrame {
 
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    // get UserName from UserTable
+    public String getEditUserName() {
+        int row = userTable.getSelectedRow();
+        if (row < 0) {
+            return null;
         }
-        //</editor-fold>
+        String userName = userTable.getModel().getValueAt(row, 1).toString();
+        return userName;
+    }
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainView().setVisible(true);
+    public String getEditUserRole() {
+        int row = userTable.getSelectedRow();
+        if (row < 0) {
+            return null;
+        }
+        String userRole = userTable.getModel().getValueAt(row, 2).toString();
+        return userRole;
+    }
+   
+    //SetUserName to txtUserName Field
+    public void setEditUserName(String userName) {
+        txtUserName.setText(userName);
+    }
+
+    public void setSelectedComboBoxRole(String roleName) {
+        for (int i = 0; i < comboBoxRole.getItemCount(); i++) {
+            if (comboBoxRole.getItemAt(i).toString().equals(roleName)) {
+                comboBoxRole.setSelectedIndex(i);
+                break;
             }
-        });
+        }
+    }
+
+    public String getRoleName() {
+        return comboBoxRole.getSelectedItem().toString();
+      }
+    public String getUserInfo(){
+    return txtUserName.getText();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1165,11 +1235,12 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JPanel accountPanel1;
     private javax.swing.JPanel accountPanel2;
     private javax.swing.JPanel bodyPanel;
+    private javax.swing.JButton btnSaveNewRole;
+    private javax.swing.JComboBox comboBoxRole;
     private javax.swing.JPasswordField confirmNewPasswordField;
     private javax.swing.JButton courseBtn;
     private javax.swing.JPanel coursePanel;
     private javax.swing.JLabel dateReleaseTextField;
-    private javax.swing.JTextField emailField;
     private javax.swing.JLabel emailLabel;
     private javax.swing.JLabel emailLabel1;
     private javax.swing.JLabel emailLabel2;
@@ -1189,6 +1260,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPaneUserTable;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -1206,7 +1278,6 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JLabel passwordLabel1;
     private javax.swing.JLabel passwordLabel2;
     private javax.swing.JLabel passwordLabel3;
-    private javax.swing.JComboBox roleComboBox;
     private javax.swing.JButton saveNewPassBtn;
     private javax.swing.JPanel sideBarPanel;
     private javax.swing.JPanel sidebarCoursePanel;
@@ -1216,6 +1287,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JPanel sidebarUserPanel1;
     private javax.swing.JButton studentBtn;
     private javax.swing.JPanel studentPanel;
+    private javax.swing.JTextField txtUserName;
     private javax.swing.JButton userBtn;
     private javax.swing.JLabel userImage;
     private javax.swing.JButton userInfoBtn;
