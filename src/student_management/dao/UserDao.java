@@ -217,7 +217,7 @@ public class UserDao implements IUser {
     @Override
     public List<User> getAllUser() {
         List<User> listUser = new ArrayList<>();
-       
+
         try {
             databaseConnection = DatabaseConnection.getInstance().getConnetion();
             try (PreparedStatement ps = databaseConnection.prepareCall("select * from tbluser");) {
@@ -225,7 +225,7 @@ public class UserDao implements IUser {
                 while (rs.next()) {
                     user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
                     listUser.add(user);
-                  
+
                 }
             }
         } catch (SQLException ex) {
@@ -235,24 +235,24 @@ public class UserDao implements IUser {
     }
 
     @Override
-    public Map<String, User> getListMapUserWithRole() {
+    public List<List<User>> getListMapUserWithRole() {
         List<User> listUser = new ArrayList<>();
-        Map<String, User> listMap = new HashMap<>
-        ();
+        List<List<User>> listUser1 = new ArrayList<List<User>>();
         try {
             databaseConnection = DatabaseConnection.getInstance().getConnetion();
-            try ( CallableStatement cst = databaseConnection.prepareCall("{call sp_get_list_map_user_with_role}");) {
+            try (CallableStatement cst = databaseConnection.prepareCall("{call sp_get_list_map_user_with_role}");) {
                 rs = cst.executeQuery();
                 while (rs.next()) {
                     user = new User(rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getInt("roleId"), rs.getInt("verifyCode"), rs.getInt("status"), rs.getDate("daterelease"));
-                    listMap.put(rs.getString("rolename"), user);
-                 
+                   listUser.add(user);
+                   listUser1.add(listUser);
+
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return listMap;
+        return listUser1;
     }
 
     @Override

@@ -5,11 +5,13 @@
  */
 package student_management.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import student_management.dao.RoleDaoImpl;
 import student_management.dao.UserDao;
+import student_management.entities.Role;
 import student_management.entities.User;
 import student_management.view.MainView;
 
@@ -23,20 +25,24 @@ public class UserController {
     private static RoleDaoImpl userRoleDao;
     private static MainView mainView;
 
-    public UserController(UserDao userDao) {
+    public UserController(UserDao userDao, MainView mainview) {
         UserController.userDao = userDao;
         UserController.userRoleDao = new RoleDaoImpl();
-        mainView = new MainView();
-       
+        mainView = mainview;
+
     }
 
     public void showUserView() {
-        Map<String, User> listMap = new HashMap<>();
-        listMap = userDao.getListMapUserWithRole();
-          List<User> list = userDao.getAllUser();
-            mainView.showUserView(list);
-       
-     
+        List<List<User>> listUser = new ArrayList<List<User>>();
+        listUser = userDao.getListMapUserWithRole();
 
+        mainView.showUserView(listUser);
     }
+
+    public void showListRole() {
+
+        List<Role> listRole = userRoleDao.getAllRole();
+        mainView.showListRole(listRole);
+    }
+
 }

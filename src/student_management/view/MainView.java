@@ -8,6 +8,7 @@ package student_management.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
@@ -33,8 +34,8 @@ public class MainView extends javax.swing.JFrame {
     // định nghĩa dữ liệu mặc định của bẳng student là rỗng
     private Object data = new Object[][]{};
 
-    public MainView() {   
-        
+    public MainView() {
+
         initComponents();
     }
 
@@ -1021,7 +1022,6 @@ public class MainView extends javax.swing.JFrame {
         hideListPanel(listHidePanel);
         //SHow Panel
         showChoosePanel(userPanel);
-      
 
     }
 
@@ -1059,47 +1059,26 @@ public class MainView extends javax.swing.JFrame {
         // jPanel1.setVisible(false);
     }
     // tra ve list array
-    public void showUserView(List<User> listusers) {
-        int size = listusers.size();
-        Object[][] data = new Object[size][3];
-        int i = 0;
-        int startingNumber = 1;   
-        String [] cl1 = new String[]{"a","v","c"};
-        for (User data1 : listusers) {
-            data[i][0]= data1.getRoleId();
-            data[i][1] = data1.getUserName();
-            data[i][2] = data1.getEmail();
-        }        
-       
-       userTable.setModel(new DefaultTableModel(data, cl1));
-//        model.fireTableDataChanged();
-    }
+
     // Tra ve list theo dang Map 
- public void showUserView(Map<String, User> listUserWithRole) {
+    public void showUserView(List<List<User>> listUserWithRole) {
         int size = listUserWithRole.size();
-        Object[][] data = new Object[size][3];
+      //  Object[][] data = new Object[size][3];
         int i = 0;
         int startingNumber = 1;
        
-        String[] columnName = new String[]{
-            "STT", "UserName"};
-      
-        for (Map.Entry<String, User> entrySet : listUserWithRole.entrySet()) {
-            String key = entrySet.getKey();
-            User value = entrySet.getValue();
-            data[i][0] = startingNumber;
-            data[i][1] = value.getUserName();
-           
-            data[i][2] = key;
-
-            i++;
-            startingNumber++;
-
+        for (List<User> listUserWithRole1 : listUserWithRole) {
+            System.out.println(listUserWithRole1);
         }
-       
-       userTable.setModel(new DefaultTableModel(data, columnName));
+
+       // userTable.setModel(new DefaultTableModel(data, columnNames));
 //        model.fireTableDataChanged();
     }
+
+    public void showListRole(List<Role> listRole) {
+      
+    }
+
     public String getNewPassWord() {
         return String.valueOf(passwordField.getPassword());
     }

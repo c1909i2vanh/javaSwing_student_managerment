@@ -64,7 +64,7 @@ public class HomeController {
         public void actionPerformed(ActionEvent e) {
             // show UserPanel
             mainView.showUserPanel();           
-            UserController userController = new UserController(homeUserDao);
+            UserController userController = new UserController(homeUserDao,mainView);
             userController.showUserView();
         }
 

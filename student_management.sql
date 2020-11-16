@@ -265,13 +265,14 @@ GO
 
 -- Tạo thủ tục lấy danh sách user kết hợp rolename
 
-CREATE PROCEDURE sp_get_list_map_user_with_role
+AlTER PROCEDURE sp_get_list_map_user_with_role
+
 AS
 	BEGIN
 		SELECT * from tbluser us
 		JOIN tblrole role
 		ON us.roleId = role.id
-		AND us.username NOT LIKE 'admin'
+		AND us.username NOT LIKE  'admin'
 		ORDER BY us.roleId
 	END
 GO
