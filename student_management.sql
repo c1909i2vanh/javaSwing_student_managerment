@@ -28,7 +28,9 @@ GO
 CREATE TABLE tblclass(
 	id int identity(1,1) PRIMARY KEY,
 	classname varchar(20),
+	status tinyint
 	CONSTRAINT IX_tblclass_classname_unique UNIQUE(classname)
+
 )
 GO
 
