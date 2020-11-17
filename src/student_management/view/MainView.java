@@ -312,7 +312,7 @@ public class MainView extends javax.swing.JFrame {
         sidebarCoursePanel.setBackground(new java.awt.Color(0, 51, 51));
 
         courseBtn.setBackground(new java.awt.Color(255, 255, 255));
-        courseBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/course.png"))); // NOI18N
+        courseBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/class.png"))); // NOI18N
         courseBtn.setBorder(null);
         courseBtn.setBorderPainted(false);
         courseBtn.setContentAreaFilled(false);
